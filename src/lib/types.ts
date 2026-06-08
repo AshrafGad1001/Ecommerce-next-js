@@ -1,0 +1,28 @@
+// lib/types.ts
+
+export interface Product {
+    _id: string
+    title: string
+    price: number
+    imageCover: string
+    ratingsAverage: number
+    ratingsQuantity: number
+    category?: {
+        name: string
+    }
+}
+
+export interface CartItem {
+    _id: string
+    product: Product
+    count: number
+    price: number
+}
+
+export interface CartData {
+    data: {
+        products: CartItem[]
+        totalCartPrice: number
+        _id: string
+    }
+}
