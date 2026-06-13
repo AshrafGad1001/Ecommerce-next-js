@@ -88,7 +88,7 @@ export default function Home() {
             {/* Left section  - Text */}
             <Box sx={{ flex: 1, textAlign: { xs: 'center', md: 'left' }, zIndex: 1 }}>
               <Chip
-                label="👗 New Collection 2025"
+                label="New Collection 2026"
                 sx={{
                   mb: 3,
                   bgcolor: 'rgba(255,255,255,0.15)',

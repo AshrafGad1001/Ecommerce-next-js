@@ -13,7 +13,7 @@ export default function Footer() {
     return (
         <Box
             component="footer"
-            sx={{ bgcolor: '#7c3aed', color: 'white', pt: 4, pb: 2 }}
+            sx={{ bgcolor: '#EDEDE9',color: '#1a1a2e', pt: 4, pb: 2 }}
         >
             <Box sx={{
                 maxWidth: '1200px',
@@ -81,13 +81,11 @@ export default function Footer() {
                                 key={i}
                                 component={Link}
                                 href={social.href}
-                                sx={{
-                                    color: 'white',
-                                    bgcolor: 'rgba(255,255,255,0.1)',
-                                    width: 36,
-                                    height: 36,
-                                    '&:hover': { bgcolor: 'rgba(255,255,255,0.2)' },
-                                }}
+                             sx={{
+    color: '#1a1a2e',
+    bgcolor: 'rgba(0,0,0,0.06)',
+    '&:hover': { bgcolor: 'rgba(0,0,0,0.12)' },
+}}
                             >
                                 <FontAwesomeIcon icon={social.icon} style={{ fontSize: '14px' }} />
                             </IconButton>
@@ -97,7 +95,7 @@ export default function Footer() {
 
             </Box>
 
-            <Divider sx={{ borderColor: 'rgba(255,255,255,0.2)', mx: 3 }} />
+            <Divider sx={{ borderColor: 'rgba(0,0,0,0.1)', mx: 3 }} />
 
             <Typography
                 variant="body2"
