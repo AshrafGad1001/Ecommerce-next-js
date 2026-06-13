@@ -1,4 +1,13 @@
+// src/lib/authSlice.ts
 import { createSlice } from '@reduxjs/toolkit'
+
+function setCookie(name: string, value: string) {
+    document.cookie = `${name}=${value}; path=/; max-age=${7 * 24 * 60 * 60}`
+}
+
+function deleteCookie(name: string) {
+    document.cookie = `${name}=; path=/; max-age=0`
+}
 
 const authSlice = createSlice({
     name: 'auth',
@@ -13,6 +22,7 @@ const authSlice = createSlice({
             if (typeof window !== 'undefined') {
                 localStorage.setItem('userToken', action.payload.token)
                 localStorage.setItem('username', action.payload.username)
+                setCookie('userToken', action.payload.token)
             }
         },
         logout: (state) => {
@@ -21,6 +31,7 @@ const authSlice = createSlice({
             if (typeof window !== 'undefined') {
                 localStorage.removeItem('userToken')
                 localStorage.removeItem('username')
+                deleteCookie('userToken')
             }
         },
         loadToken: (state) => {
