@@ -11,7 +11,7 @@ import Image from 'next/image'
 import { Box, Container, Typography, Chip, CircularProgress } from '@mui/material'
 import { Product as ProductType } from '@/lib/types'
 import axios from 'axios'
-
+import toast from 'react-hot-toast'
 export default function ProductDetailsPage() {
     const { id } = useParams()
     const dispatch = useDispatch<AppDispatch>()
@@ -34,14 +34,26 @@ export default function ProductDetailsPage() {
         fetchProduct()
     }, [id])
 
-    async function handleAddToCart() {
-        if (!product) return
-        setIsAdding(true)
-        await dispatch(addToCart(product._id))
-        setIsAdding(false)
-        setAdded(true)
-        setTimeout(() => setAdded(false), 2000)
-    }
+ async function handleAddToCart() {
+    if (!product) return
+    setIsAdding(true)
+    await dispatch(addToCart(product._id))
+    setIsAdding(false)
+    setAdded(true)
+    toast.success(`${product.title.split(' ').slice(0, 3).join(' ')} added to cart!`, {
+        style: {
+            borderRadius: '10px',
+            background: '#1a1a2e',
+            color: '#fff',
+            fontWeight: 600,
+        },
+        iconTheme: {
+            primary: '#7c3aed',
+            secondary: '#fff',
+        },
+    })
+    setTimeout(() => setAdded(false), 2000)
+}
 
     if (loading) return (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>

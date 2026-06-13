@@ -10,6 +10,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Box, Typography, Chip } from '@mui/material'
 import { Product as ProductType } from '@/lib/types'
+import toast from 'react-hot-toast'
 
 export default function Product({ p }: { p: ProductType }) {
     const dispatch = useDispatch<AppDispatch>()
@@ -17,13 +18,25 @@ export default function Product({ p }: { p: ProductType }) {
     const [added, setAdded] = useState(false)
     const [hovered, setHovered] = useState(false)
 
-    async function handleAddToCart() {
-        setIsLoading(true)
-        await dispatch(addToCart(p._id))
-        setIsLoading(false)
-        setAdded(true)
-        setTimeout(() => setAdded(false), 2000)
-    }
+ async function handleAddToCart() {
+    setIsLoading(true)
+    await dispatch(addToCart(p._id))
+    setIsLoading(false)
+    setAdded(true)
+    toast.success(`${p.title.split(' ').slice(0, 3).join(' ')} added to cart!`, {
+        style: {
+            borderRadius: '10px',
+            background: '#1a1a2e',
+            color: '#fff',
+            fontWeight: 600,
+        },
+        iconTheme: {
+            primary: '#7c3aed',
+            secondary: '#fff',
+        },
+    })
+    setTimeout(() => setAdded(false), 2000)
+}
 
     return (
         <Box

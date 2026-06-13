@@ -91,15 +91,17 @@ export default function CartPage() {
                                 alignItems: 'center',
                             }}>
 
-                                {/* Image */}
-                                <Box sx={{ position: 'relative', width: 90, height: 90, borderRadius: 2, overflow: 'hidden', flexShrink: 0 }}>
-                                    <Image
-                                        src={item.product?.imageCover}
-                                        alt={item.product?.title ?? ''}
-                                        fill
-                                        style={{ objectFit: 'cover' }}
-                                    />
-                                </Box>
+                               {/* Image */}
+<Box sx={{ position: 'relative', width: 90, height: 90, borderRadius: 2, overflow: 'hidden', flexShrink: 0 }}>
+    {item.product?.imageCover && (
+        <Image
+            src={item.product.imageCover}
+            alt={item.product?.title ?? ''}
+            fill
+            style={{ objectFit: 'cover' }}
+        />
+    )}
+</Box>
 
                                 {/* Info */}
                                 <Box sx={{ flex: 1 }}>

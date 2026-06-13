@@ -4,7 +4,7 @@ import Navbar from './_Components/navbar/Navbar'
 import Footer from './_Components/footer/Footer'
 import ThemeRegistry from './_Components/ThemeRegistry'
 import ReduxProvider from './_Components/ReduxProvider'
-
+import { Toaster } from 'react-hot-toast'
 export const metadata: Metadata = {
   title: 'MyApp | E-Commerce',
   description: 'Best products at the best prices',
@@ -25,6 +25,7 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
+               <Toaster position="bottom-right" />
           </ThemeRegistry>
         </ReduxProvider>
       </body>
