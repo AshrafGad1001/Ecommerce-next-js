@@ -26,3 +26,10 @@ export interface CartData {
         _id: string
     }
 }
+
+export interface Category {
+    _id: string
+    name: string
+    image: string
+    slug: string
+}

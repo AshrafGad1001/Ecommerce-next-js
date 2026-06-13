@@ -22,6 +22,7 @@ import Image from 'next/image'
 const navLinks = [
     { label: 'Home', href: '/' },
     { label: 'Products', href: '/products' },
+    { label: 'Categories', href: '/categories' },
 ]
 
 export default function Navbar() {
