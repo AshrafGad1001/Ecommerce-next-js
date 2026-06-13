@@ -1,16 +1,19 @@
 'use client'
 
-import { useDispatch } from 'react-redux'
-import { AppDispatch } from '@/lib/store'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '@/lib/store'
 import { addToCart } from '@/lib/cartSlice'
+import { addToFavorites, removeFromFavorites } from '@/lib/favoritesSlice'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartShopping, faStar, faEye, faCheck } from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Box, Typography, Chip } from '@mui/material'
+import { Box, Typography, Chip, IconButton } from '@mui/material'
 import { Product as ProductType } from '@/lib/types'
 import toast from 'react-hot-toast'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import FavoriteIcon from '@mui/icons-material/Favorite'
 
 export default function Product({ p }: { p: ProductType }) {
     const dispatch = useDispatch<AppDispatch>()
@@ -18,25 +21,36 @@ export default function Product({ p }: { p: ProductType }) {
     const [added, setAdded] = useState(false)
     const [hovered, setHovered] = useState(false)
 
- async function handleAddToCart() {
-    setIsLoading(true)
-    await dispatch(addToCart(p._id))
-    setIsLoading(false)
-    setAdded(true)
-    toast.success(`${p.title.split(' ').slice(0, 3).join(' ')} added to cart!`, {
-        style: {
-            borderRadius: '10px',
-            background: '#1a1a2e',
-            color: '#fff',
-            fontWeight: 600,
-        },
-        iconTheme: {
-            primary: '#7c3aed',
-            secondary: '#fff',
-        },
-    })
-    setTimeout(() => setAdded(false), 2000)
-}
+    const favoritesIds = useSelector((state: RootState) => state.favorites.favoritesIds)
+    const isFavorite = favoritesIds.includes(p._id)
+
+    async function handleAddToCart() {
+        setIsLoading(true)
+        await dispatch(addToCart(p._id))
+        setIsLoading(false)
+        setAdded(true)
+        toast.success(`${p.title.split(' ').slice(0, 3).join(' ')} added to cart!`, {
+            style: { borderRadius: '10px', background: '#1a1a2e', color: '#fff', fontWeight: 600 },
+            iconTheme: { primary: '#7c3aed', secondary: '#fff' },
+        })
+        setTimeout(() => setAdded(false), 2000)
+    }
+
+    async function handleFavorite() {
+        if (isFavorite) {
+            await dispatch(removeFromFavorites(p._id))
+            toast.success('Removed from favorites!', {
+                style: { borderRadius: '10px', background: '#1a1a2e', color: '#fff', fontWeight: 600 },
+                iconTheme: { primary: '#ef4444', secondary: '#fff' },
+            })
+        } else {
+            await dispatch(addToFavorites(p._id))
+            toast.success('Added to favorites!', {
+                style: { borderRadius: '10px', background: '#1a1a2e', color: '#fff', fontWeight: 600 },
+                iconTheme: { primary: '#ef4444', secondary: '#fff' },
+            })
+        }
+    }
 
     return (
         <Box
@@ -87,6 +101,25 @@ export default function Product({ p }: { p: ProductType }) {
                         border: '0.5px solid #AFA9EC',
                     }}
                 />
+
+                {/* Favorite Button */}
+                <IconButton
+                    onClick={handleFavorite}
+                    sx={{
+                        position: 'absolute',
+                        top: 8,
+                        right: 8,
+                        bgcolor: 'rgba(255,255,255,0.9)',
+                        width: 32,
+                        height: 32,
+                        '&:hover': { bgcolor: '#fff' },
+                    }}
+                >
+                    {isFavorite
+                        ? <FavoriteIcon sx={{ fontSize: 16, color: '#ef4444' }} />
+                        : <FavoriteBorderIcon sx={{ fontSize: 16, color: '#6b7280' }} />
+                    }
+                </IconButton>
 
                 {/* View Button */}
                 <Link href={`/products/${p._id}`} style={{ textDecoration: 'none' }}>
@@ -177,4 +210,4 @@ export default function Product({ p }: { p: ProductType }) {
             </Box>
         </Box>
     )
-}   
+}
