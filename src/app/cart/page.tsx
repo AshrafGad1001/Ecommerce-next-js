@@ -91,17 +91,17 @@ export default function CartPage() {
                                 alignItems: 'center',
                             }}>
 
-                               {/* Image */}
-<Box sx={{ position: 'relative', width: 90, height: 90, borderRadius: 2, overflow: 'hidden', flexShrink: 0 }}>
-    {item.product?.imageCover && (
-        <Image
-            src={item.product.imageCover}
-            alt={item.product?.title ?? ''}
-            fill
-            style={{ objectFit: 'cover' }}
-        />
-    )}
-</Box>
+                                {/* Image */}
+                                <Box sx={{ position: 'relative', width: 90, height: 90, borderRadius: 2, overflow: 'hidden', flexShrink: 0 }}>
+                                    {item.product?.imageCover && (
+                                        <Image
+                                            src={item.product.imageCover}
+                                            alt={item.product?.title ?? ''}
+                                            fill
+                                            style={{ objectFit: 'cover' }}
+                                        />
+                                    )}
+                                </Box>
 
                                 {/* Info */}
                                 <Box sx={{ flex: 1 }}>
@@ -143,15 +143,15 @@ export default function CartPage() {
                                     <Typography variant="body1" sx={{ fontWeight: 800, color: '#1a1a2e' }}>
                                         {item.price * item.count} EGP
                                     </Typography>
-                                    
+
                                 </Box>
                                 <IconButton
-                                        size="large"
-                                        onClick={() => dispatch(removeItem(item.product._id))}
-                                        sx={{ color: '#ef4444' }}
-                                    >
-                                        <DeleteOutlinedIcon fontSize="large" />
-                                    </IconButton>
+                                    size="large"
+                                    onClick={() => dispatch(removeItem(item.product._id))}
+                                    sx={{ color: '#ef4444' }}
+                                >
+                                    <DeleteOutlinedIcon fontSize="large" />
+                                </IconButton>
 
                             </Paper>
                         ))}
@@ -190,9 +190,10 @@ export default function CartPage() {
                                     {cartData.data.totalCartPrice} EGP
                                 </Typography>
                             </Box>
-
                             <Button
                                 fullWidth
+                                component={Link}
+                                href="/checkout"
                                 variant="contained"
                                 size="large"
                                 sx={{
