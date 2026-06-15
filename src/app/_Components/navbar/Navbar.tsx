@@ -27,6 +27,7 @@ const navLinks = [
     { label: 'Products', href: '/products' },
     { label: 'Categories', href: '/categories' },
     { label: 'Brands', href: '/brands' },
+    { label: 'Orders', href: '/orders' }
 ]
 
 export default function Navbar() {

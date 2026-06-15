@@ -45,3 +45,18 @@ export interface Review {
     }
     createdAt: string
 }
+
+export interface Order {
+    _id: string
+    totalOrderPrice: number
+    paymentMethodType: string
+    isPaid: boolean
+    isDelivered: boolean
+    createdAt: string
+    cartItems: {
+        _id: string
+        product: Product
+        quantity: number
+        price: number
+    }[]
+}
