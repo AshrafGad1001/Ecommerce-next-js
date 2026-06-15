@@ -116,8 +116,12 @@ export default function ProductDetailsPage() {
                 style: { borderRadius: '10px', background: '#1a1a2e', color: '#fff', fontWeight: 600 },
                 iconTheme: { primary: '#7c3aed', secondary: '#fff' },
             })
-        } catch (err: any) {
-            toast.error(err.response?.data?.message || 'Failed to submit review')
+        } catch (err) {
+            if (axios.isAxiosError(err)) {
+                toast.error(err.response?.data?.message || 'Failed to submit review')
+            } else {
+                toast.error('Failed to submit review')
+            }
         } finally {
             setSubmitting(false)
         }
@@ -227,10 +231,7 @@ export default function ProductDetailsPage() {
 
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
                             <Typography sx={{ color: '#6b7280', fontSize: '14px' }}>Rating:</Typography>
-                            <Rating
-                                value={rating}
-                                onChange={(_, val) => setRating(val ?? 5)}
-                            />
+                            <Rating value={rating} onChange={(_, val) => setRating(val ?? 5)} />
                         </Box>
 
                         <TextField

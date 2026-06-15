@@ -3,6 +3,7 @@
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Button from '@mui/material/Button'
+import InputBase from '@mui/material/InputBase'
 import Link from 'next/link'
 import {
     Box, Badge, IconButton, Drawer, List,
@@ -13,6 +14,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close'
+import SearchIcon from '@mui/icons-material/Search'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState, AppDispatch } from '@/lib/store'
 import { logout, loadToken } from '@/lib/authSlice'
@@ -24,7 +26,7 @@ const navLinks = [
     { label: 'Home', href: '/' },
     { label: 'Products', href: '/products' },
     { label: 'Categories', href: '/categories' },
-    { label: 'Brands', href: '/brands' }
+    { label: 'Brands', href: '/brands' },
 ]
 
 export default function Navbar() {
@@ -35,6 +37,8 @@ export default function Navbar() {
     const cartCount = useSelector((state: RootState) => state.cart.cartCount)
     const favoritesIds = useSelector((state: RootState) => state.favorites.favoritesIds)
     const [drawerOpen, setDrawerOpen] = useState(false)
+    const [searchQuery, setSearchQuery] = useState('')
+    const [searchOpen, setSearchOpen] = useState(false)
 
     useEffect(() => {
         dispatch(loadToken())
@@ -46,10 +50,19 @@ export default function Navbar() {
         setDrawerOpen(false)
     }
 
+    function handleSearch(e: React.KeyboardEvent<HTMLInputElement>) {
+        if (e.key === 'Enter' && searchQuery.trim()) {
+            router.push(`/products?search=${searchQuery.trim()}`)
+            setSearchQuery('')
+            setSearchOpen(false)
+        }
+    }
+
     return (
         <>
             <AppBar position="static" elevation={0} sx={{ bgcolor: '#EDEDE9', borderBottom: '1px solid #d6d5d0' }}>
                 <Toolbar>
+
                     {/* Logo */}
                     <Box component={Link} href="/" sx={{ display: 'flex', alignItems: 'center', mr: 3, textDecoration: 'none' }}>
                         <Image src="/logo.png" alt="Logo" width={120} height={50} style={{ objectFit: 'contain' }} />
@@ -72,6 +85,29 @@ export default function Navbar() {
                     {/* Spacer Mobile */}
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }} />
 
+                    {/* Search Bar - Desktop */}
+                    <Box sx={{
+                        display: { xs: 'none', md: 'flex' },
+                        alignItems: 'center',
+                        bgcolor: '#f3f4f6',
+                        borderRadius: '999px',
+                        px: 2,
+                        py: 0.5,
+                        mr: 2,
+                        border: '1px solid #e5e7eb',
+                        '&:focus-within': { borderColor: '#7c3aed' },
+                        transition: 'border-color 0.2s ease',
+                    }}>
+                        <SearchIcon sx={{ color: '#9ca3af', fontSize: 18, mr: 1 }} />
+                        <InputBase
+                            placeholder="Search products..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onKeyDown={handleSearch}
+                            sx={{ fontSize: '14px', width: 180 }}
+                        />
+                    </Box>
+
                     {/* Right Side - Desktop */}
                     <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1.5 }}>
                         {token && (
@@ -84,14 +120,12 @@ export default function Navbar() {
                                     Hi, {username} 👤
                                 </Button>
 
-                                {/* Favorites */}
                                 <IconButton component={Link} href="/favorites" sx={{ color: '#ef4444' }}>
                                     <Badge badgeContent={favoritesIds.length} color="error">
                                         <FavoriteIcon />
                                     </Badge>
                                 </IconButton>
 
-                                {/* Cart */}
                                 <IconButton component={Link} href="/cart" sx={{ color: '#7c3aed' }}>
                                     <Badge badgeContent={cartCount} color="error">
                                         <ShoppingCartIcon />
@@ -128,8 +162,14 @@ export default function Navbar() {
                         )}
                     </Box>
 
-                    {/* Mobile - Favorites + Cart + Menu */}
+                    {/* Mobile - Search + Favorites + Cart + Menu */}
                     <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', gap: 1 }}>
+
+                        {/* Mobile Search Icon */}
+                        <IconButton onClick={() => setSearchOpen(!searchOpen)} sx={{ color: '#1a1a2e' }}>
+                            <SearchIcon />
+                        </IconButton>
+
                         {token && (
                             <>
                                 <IconButton component={Link} href="/favorites" sx={{ color: '#ef4444' }}>
@@ -144,18 +184,47 @@ export default function Navbar() {
                                 </IconButton>
                             </>
                         )}
+
                         <IconButton onClick={() => setDrawerOpen(true)} sx={{ color: '#1a1a2e' }}>
                             <MenuIcon />
                         </IconButton>
                     </Box>
+
                 </Toolbar>
+
+                {/* Mobile Search Bar */}
+                {searchOpen && (
+                    <Box sx={{
+                        display: { xs: 'flex', md: 'none' },
+                        alignItems: 'center',
+                        bgcolor: '#f3f4f6',
+                        mx: 2,
+                        mb: 1.5,
+                        px: 2,
+                        py: 0.5,
+                        borderRadius: '999px',
+                        border: '1px solid #e5e7eb',
+                        '&:focus-within': { borderColor: '#7c3aed' },
+                    }}>
+                        <SearchIcon sx={{ color: '#9ca3af', fontSize: 18, mr: 1 }} />
+                        <InputBase
+                            autoFocus
+                            fullWidth
+                            placeholder="Search products..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onKeyDown={handleSearch}
+                            sx={{ fontSize: '14px' }}
+                        />
+                    </Box>
+                )}
+
             </AppBar>
 
             {/* MOBILE DRAWER */}
             <Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
                 <Box sx={{ width: 260, height: '100%', bgcolor: '#EDEDE9', display: 'flex', flexDirection: 'column' }}>
 
-                    {/* Header */}
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 2 }}>
                         <Image src="/logo.png" alt="Logo" width={90} height={38} style={{ objectFit: 'contain' }} />
                         <IconButton onClick={() => setDrawerOpen(false)} sx={{ color: '#1a1a2e' }}>
@@ -165,7 +234,6 @@ export default function Navbar() {
 
                     <Divider sx={{ borderColor: '#d6d5d0' }} />
 
-                    {/* Nav Links */}
                     <List>
                         {navLinks.map((link) => (
                             <ListItem key={link.href} disablePadding>
@@ -198,7 +266,6 @@ export default function Navbar() {
                                         />
                                     </ListItemButton>
                                 </ListItem>
-
                                 <ListItem disablePadding>
                                     <ListItemButton
                                         component={Link}
@@ -218,7 +285,6 @@ export default function Navbar() {
 
                     <Divider sx={{ borderColor: '#d6d5d0' }} />
 
-                    {/* Auth */}
                     <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 1.5, mt: 'auto' }}>
                         {token ? (
                             <>
