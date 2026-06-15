@@ -33,3 +33,15 @@ export interface Category {
     image: string
     slug: string
 }
+
+
+export interface Review {
+    _id: string
+    comment: string
+    ratings: number
+    user: {
+        _id: string
+        name: string
+    }
+    createdAt: string
+}
