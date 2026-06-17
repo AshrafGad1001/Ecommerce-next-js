@@ -8,13 +8,16 @@ import { fetchCategories } from '@/lib/categoriesSlice'
 import Product from '../_Components/product/Product'
 import { useSearchParams } from 'next/navigation'
 import InboxIcon from '@mui/icons-material/Inbox'
+import { useTheme } from '@mui/material/styles'
 import {
     Box, Container, Typography, Grid,
     Chip, CircularProgress
 } from '@mui/material'
 import { Suspense } from 'react'
+import ThemeRegistry from '../_Components/ThemeRegistry'
 
 function ProductsContent() {
+    const theme = useTheme()
     const dispatch = useDispatch<AppDispatch>()
     const { products, loading } = useSelector((state: RootState) => state.products)
     const { categories } = useSelector((state: RootState) => state.categories)
@@ -41,25 +44,32 @@ function ProductsContent() {
     })
 
     return (
-        <Box sx={{ minHeight: '100vh', bgcolor: '#f8f7ff', py: 8 }}>
+        <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', py: 8 }}>
             <Container maxWidth="xl">
 
                 {/* Header */}
                 <Box sx={{ textAlign: 'center', mb: 4 }}>
                     <Chip
                         label="Our Collection"
-                        sx={{ mb: 2, bgcolor: '#ede9fe', color: '#7c3aed', fontWeight: 600 }}
+                        sx={{
+                            mb: 2,
+                            bgcolor: `${theme.palette.primary.main}22`,
+                            color: theme.palette.primary.main,
+                            fontWeight: 600,
+                        }}
                     />
-                    <Typography variant="h3" sx={{ fontWeight: 800, color: '#1a1a2e' }}>
+                    <Typography variant="h3" sx={{ fontWeight: 800, color: 'text.primary' }}>
                         {searchParam ? (
                             <>
                                 Results for{' '}
-                                <Box component="span" sx={{ color: '#7c3aed' }}>&ldquo;{searchParam}&rdquo;</Box>
+                                <Box component="span" sx={{ color: 'primary.main' }}>
+                                    &ldquo;{searchParam}&rdquo;
+                                </Box>
                             </>
                         ) : (
                             <>
                                 Latest{' '}
-                                <Box component="span" sx={{ color: '#7c3aed' }}>Products</Box>
+                                <Box component="span" sx={{ color: 'primary.main' }}>Products</Box>
                             </>
                         )}
                     </Typography>
@@ -83,14 +93,16 @@ function ProductsContent() {
                                 fontWeight: 600,
                                 fontSize: '13px',
                                 border: '2px solid',
-                                borderColor: !activeCategory ? '#7c3aed' : '#e5e7eb',
-                                bgcolor: !activeCategory ? '#7c3aed' : '#fff',
-                                color: !activeCategory ? '#fff' : '#6b7280',
+                                borderColor: !activeCategory ? 'primary.main' : '#e5e7eb',
+                                bgcolor: !activeCategory ? 'primary.main' : '#fff',
+                                color: !activeCategory ? '#fff' : 'text.secondary',
                                 transition: 'all 0.2s ease',
                                 '&:hover': {
-                                    borderColor: '#7c3aed',
-                                    color: !activeCategory ? '#fff' : '#7c3aed',
-                                    bgcolor: !activeCategory ? '#6d28d9' : '#f5f3ff',
+                                    borderColor: 'primary.main',
+                                    color: !activeCategory ? '#fff' : 'primary.main',
+                                    bgcolor: !activeCategory
+                                        ? theme.palette.primary.dark
+                                        : `${theme.palette.primary.main}11`,
                                 },
                             }}
                         >
@@ -108,14 +120,16 @@ function ProductsContent() {
                                     fontWeight: 600,
                                     fontSize: '13px',
                                     border: '2px solid',
-                                    borderColor: activeCategory === cat._id ? '#7c3aed' : '#e5e7eb',
-                                    bgcolor: activeCategory === cat._id ? '#7c3aed' : '#fff',
-                                    color: activeCategory === cat._id ? '#fff' : '#6b7280',
+                                    borderColor: activeCategory === cat._id ? 'primary.main' : '#e5e7eb',
+                                    bgcolor: activeCategory === cat._id ? 'primary.main' : '#fff',
+                                    color: activeCategory === cat._id ? '#fff' : 'text.secondary',
                                     transition: 'all 0.2s ease',
                                     '&:hover': {
-                                        borderColor: '#7c3aed',
-                                        color: activeCategory === cat._id ? '#fff' : '#7c3aed',
-                                        bgcolor: activeCategory === cat._id ? '#6d28d9' : '#f5f3ff',
+                                        borderColor: 'primary.main',
+                                        color: activeCategory === cat._id ? '#fff' : 'primary.main',
+                                        bgcolor: activeCategory === cat._id
+                                            ? theme.palette.primary.dark
+                                            : `${theme.palette.primary.main}11`,
                                     },
                                 }}
                             >
@@ -128,7 +142,7 @@ function ProductsContent() {
                 {/* Products */}
                 {loading ? (
                     <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}>
-                        <CircularProgress sx={{ color: '#7c3aed' }} />
+                        <CircularProgress color="primary" />
                     </Box>
                 ) : filtered.length === 0 ? (
                     <Box sx={{
@@ -139,22 +153,22 @@ function ProductsContent() {
                         py: 10,
                         gap: 2,
                     }}>
-                        <InboxIcon sx={{ fontSize: '5rem', color: '#d1d5db' }} />
-                        <Typography variant="h6" sx={{ fontWeight: 700, color: '#6b7280' }}>
+                        <InboxIcon sx={{ fontSize: '5rem', color: 'text.disabled' }} />
+                        <Typography variant="h6" sx={{ fontWeight: 700, color: 'text.secondary' }}>
                             {searchParam ? `No results for ${searchParam}` : 'No Products in this Category'}
                         </Typography>
                         <Chip
                             label="Show All Products"
                             onClick={() => setSelected(null)}
                             sx={{
-                                bgcolor: '#7c3aed',
+                                bgcolor: 'primary.main',
                                 color: '#fff',
                                 fontWeight: 600,
                                 cursor: 'pointer',
                                 px: 2,
                                 py: 2.5,
                                 fontSize: '14px',
-                                '&:hover': { bgcolor: '#6d28d9' },
+                                '&:hover': { bgcolor: 'primary.dark' },
                             }}
                         />
                     </Box>
@@ -175,12 +189,14 @@ function ProductsContent() {
 
 export default function ProductsPage() {
     return (
-        <Suspense fallback={
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
-                <CircularProgress sx={{ color: '#7c3aed' }} />
-            </Box>
-        }>
-            <ProductsContent />
-        </Suspense>
+        <ThemeRegistry>
+            <Suspense fallback={
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
+                    <CircularProgress color="primary" />
+                </Box>
+            }>
+                <ProductsContent />
+            </Suspense>
+        </ThemeRegistry>
     )
 }

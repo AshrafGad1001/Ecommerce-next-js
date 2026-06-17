@@ -13,13 +13,16 @@ import {
     Box, Container, Typography, Chip, CircularProgress,
     TextField, Button, Avatar, Divider, Rating, Paper
 } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import { Product as ProductType, Review } from '@/lib/types'
 import axios from 'axios'
 import toast from 'react-hot-toast'
+import ThemeRegistry from '../../_Components/ThemeRegistry'
 
-export default function ProductDetailsPage() {
+function ProductDetailsContent() {
+    const theme = useTheme()
     const { id } = useParams()
     const dispatch = useDispatch<AppDispatch>()
     const token = useSelector((state: RootState) => state.auth.token)
@@ -29,6 +32,7 @@ export default function ProductDetailsPage() {
     const [loading, setLoading] = useState(true)
     const [isAdding, setIsAdding] = useState(false)
     const [added, setAdded] = useState(false)
+    const [activeImage, setActiveImage] = useState<string>('')
 
     const [reviews, setReviews] = useState<Review[]>([])
     const [reviewsLoading, setReviewsLoading] = useState(true)
@@ -43,6 +47,7 @@ export default function ProductDetailsPage() {
             try {
                 const { data } = await axios.get(`https://ecommerce.routemisr.com/api/v1/products/${id}`)
                 setProduct(data.data)
+                setActiveImage(data.data.imageCover)
             } catch (err) {
                 console.error(err)
             } finally {
@@ -73,8 +78,8 @@ export default function ProductDetailsPage() {
         setIsAdding(false)
         setAdded(true)
         toast.success(`${product.title.split(' ').slice(0, 3).join(' ')} added to cart!`, {
-            style: { borderRadius: '10px', background: '#1a1a2e', color: '#fff', fontWeight: 600 },
-            iconTheme: { primary: '#7c3aed', secondary: '#fff' },
+            style: { borderRadius: '10px', background: theme.palette.text.primary, color: '#fff', fontWeight: 600 },
+            iconTheme: { primary: theme.palette.primary.main, secondary: '#fff' },
         })
         setTimeout(() => setAdded(false), 2000)
     }
@@ -84,13 +89,13 @@ export default function ProductDetailsPage() {
         if (isFavorite) {
             await dispatch(removeFromFavorites(product._id))
             toast.success('Removed from favorites!', {
-                style: { borderRadius: '10px', background: '#1a1a2e', color: '#fff', fontWeight: 600 },
+                style: { borderRadius: '10px', background: theme.palette.text.primary, color: '#fff', fontWeight: 600 },
                 iconTheme: { primary: '#ef4444', secondary: '#fff' },
             })
         } else {
             await dispatch(addToFavorites(product._id))
             toast.success('Added to favorites!', {
-                style: { borderRadius: '10px', background: '#1a1a2e', color: '#fff', fontWeight: 600 },
+                style: { borderRadius: '10px', background: theme.palette.text.primary, color: '#fff', fontWeight: 600 },
                 iconTheme: { primary: '#ef4444', secondary: '#fff' },
             })
         }
@@ -113,8 +118,8 @@ export default function ProductDetailsPage() {
             setComment('')
             setRating(5)
             toast.success('Review submitted!', {
-                style: { borderRadius: '10px', background: '#1a1a2e', color: '#fff', fontWeight: 600 },
-                iconTheme: { primary: '#7c3aed', secondary: '#fff' },
+                style: { borderRadius: '10px', background: theme.palette.text.primary, color: '#fff', fontWeight: 600 },
+                iconTheme: { primary: theme.palette.primary.main, secondary: '#fff' },
             })
         } catch (err) {
             if (axios.isAxiosError(err)) {
@@ -129,7 +134,7 @@ export default function ProductDetailsPage() {
 
     if (loading) return (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
-            <CircularProgress sx={{ color: '#7c3aed' }} />
+            <CircularProgress color="primary" />
         </Box>
     )
 
@@ -139,16 +144,63 @@ export default function ProductDetailsPage() {
         </Box>
     )
 
+    const allImages = [product.imageCover, ...(product.images ?? [])]
+
     return (
         <Container maxWidth="lg" sx={{ py: 8 }}>
 
             {/* ===== Product Details ===== */}
             <Box sx={{ display: 'flex', gap: 6, flexDirection: { xs: 'column', md: 'row' } }}>
 
-                {/* Image */}
-                <Box sx={{ position: 'relative', width: { xs: '100%', md: '45%' }, height: 400, borderRadius: 3, overflow: 'hidden' }}>
-                    {product.imageCover && (
-                        <Image src={product.imageCover} alt={product.title} fill style={{ objectFit: 'cover' }} />
+                {/* Images Column */}
+                <Box sx={{ width: { xs: '100%', md: '45%' }, display: 'flex', flexDirection: 'column', gap: 2 }}>
+
+                    {/* Main Image */}
+                    <Box sx={{
+                        position: 'relative', width: '100%', height: 400,
+                        borderRadius: 3, overflow: 'hidden',
+                        border: '2px solid', borderColor: 'divider',
+                    }}>
+                        <Image
+                            src={activeImage}
+                            alt={product.title}
+                            fill
+                            style={{ objectFit: 'cover', transition: 'opacity 0.3s ease' }}
+                        />
+                    </Box>
+
+                    {/* Thumbnails */}
+                    {allImages.length > 1 && (
+                        <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
+                            {allImages.map((img, index) => (
+                                <Box
+                                    key={index}
+                                    onClick={() => setActiveImage(img)}
+                                    sx={{
+                                        position: 'relative',
+                                        width: 72, height: 72,
+                                        borderRadius: 2,
+                                        overflow: 'hidden',
+                                        cursor: 'pointer',
+                                        border: '2px solid',
+                                        borderColor: activeImage === img
+                                            ? 'primary.main'
+                                            : 'divider',
+                                        transition: 'border-color 0.2s ease',
+                                        '&:hover': {
+                                            borderColor: 'primary.main',
+                                        },
+                                    }}
+                                >
+                                    <Image
+                                        src={img}
+                                        alt={`${product.title} ${index + 1}`}
+                                        fill
+                                        style={{ objectFit: 'cover' }}
+                                    />
+                                </Box>
+                            ))}
+                        </Box>
                     )}
                 </Box>
 
@@ -156,21 +208,26 @@ export default function ProductDetailsPage() {
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <Chip
                         label={product.category?.name}
-                        sx={{ bgcolor: '#ede9fe', color: '#7c3aed', fontWeight: 600, width: 'fit-content' }}
+                        sx={{
+                            bgcolor: `${theme.palette.primary.main}22`,
+                            color: 'primary.main',
+                            fontWeight: 600,
+                            width: 'fit-content',
+                        }}
                     />
 
-                    <Typography variant="h4" sx={{ fontWeight: 800, color: '#1a1a2e' }}>
+                    <Typography variant="h4" sx={{ fontWeight: 800, color: 'text.primary' }}>
                         {product.title}
                     </Typography>
 
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <Rating value={product.ratingsAverage} precision={0.5} readOnly size="small" />
-                        <Typography sx={{ fontWeight: 600, color: '#6b7280', fontSize: '14px' }}>
+                        <Typography sx={{ fontWeight: 600, color: 'text.secondary', fontSize: '14px' }}>
                             ({product.ratingsQuantity} reviews)
                         </Typography>
                     </Box>
 
-                    <Typography variant="h5" sx={{ fontWeight: 800, color: '#7c3aed' }}>
+                    <Typography variant="h5" sx={{ fontWeight: 800, color: 'primary.main' }}>
                         {product.price} EGP
                     </Typography>
 
@@ -180,11 +237,11 @@ export default function ProductDetailsPage() {
                             onClick={handleAddToCart}
                             sx={{
                                 display: 'flex', alignItems: 'center', gap: 1,
-                                bgcolor: added ? '#10b981' : '#7c3aed',
+                                bgcolor: added ? '#10b981' : 'primary.main',
                                 color: '#fff', fontWeight: 700, px: 3, py: 1.5,
                                 borderRadius: 2, cursor: isAdding ? 'not-allowed' : 'pointer',
                                 transition: 'background 0.3s ease',
-                                '&:hover': { bgcolor: added ? '#059669' : '#6d28d9' },
+                                '&:hover': { bgcolor: added ? '#059669' : 'primary.dark' },
                             }}
                         >
                             <FontAwesomeIcon icon={added ? faCheck : faCartShopping} />
@@ -196,8 +253,9 @@ export default function ProductDetailsPage() {
                             onClick={handleFavorite}
                             sx={{
                                 display: 'flex', alignItems: 'center', gap: 1,
-                                border: '2px solid', borderColor: isFavorite ? '#ef4444' : '#e5e7eb',
-                                color: isFavorite ? '#ef4444' : '#6b7280',
+                                border: '2px solid',
+                                borderColor: isFavorite ? '#ef4444' : 'divider',
+                                color: isFavorite ? '#ef4444' : 'text.secondary',
                                 fontWeight: 700, px: 3, py: 1.5,
                                 borderRadius: 2, cursor: 'pointer',
                                 transition: 'all 0.3s ease',
@@ -213,24 +271,32 @@ export default function ProductDetailsPage() {
 
             {/* ===== Reviews Section ===== */}
             <Box sx={{ mt: 8 }}>
-                <Typography variant="h5" sx={{ fontWeight: 800, color: '#1a1a2e', mb: 4 }}>
+                <Typography variant="h5" sx={{ fontWeight: 800, color: 'text.primary', mb: 4 }}>
                     Reviews{' '}
                     <Chip
                         label={reviews.length}
                         size="small"
-                        sx={{ bgcolor: '#ede9fe', color: '#7c3aed', fontWeight: 600 }}
+                        sx={{
+                            bgcolor: `${theme.palette.primary.main}22`,
+                            color: 'primary.main',
+                            fontWeight: 600,
+                        }}
                     />
                 </Typography>
 
                 {/* Add Review */}
                 {token && (
-                    <Paper elevation={0} sx={{ p: 3, borderRadius: 3, border: '1px solid #ede9fe', mb: 4 }}>
-                        <Typography sx={{ fontWeight: 700, mb: 2, color: '#1a1a2e' }}>
+                    <Paper elevation={0} sx={{
+                        p: 3, borderRadius: 3,
+                        border: '1px solid', borderColor: 'divider',
+                        mb: 4,
+                    }}>
+                        <Typography sx={{ fontWeight: 700, mb: 2, color: 'text.primary' }}>
                             Write a Review
                         </Typography>
 
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                            <Typography sx={{ color: '#6b7280', fontSize: '14px' }}>Rating:</Typography>
+                            <Typography sx={{ color: 'text.secondary', fontSize: '14px' }}>Rating:</Typography>
                             <Rating value={rating} onChange={(_, val) => setRating(val ?? 5)} />
                         </Box>
 
@@ -249,9 +315,9 @@ export default function ProductDetailsPage() {
                             onClick={handleSubmitReview}
                             disabled={submitting || !comment.trim()}
                             sx={{
-                                bgcolor: '#7c3aed', color: '#fff', fontWeight: 700,
+                                bgcolor: 'primary.main', color: '#fff', fontWeight: 700,
                                 textTransform: 'none', borderRadius: 2,
-                                '&:hover': { bgcolor: '#6d28d9' },
+                                '&:hover': { bgcolor: 'primary.dark' },
                             }}
                         >
                             {submitting ? 'Submitting...' : 'Submit Review'}
@@ -262,11 +328,11 @@ export default function ProductDetailsPage() {
                 {/* Reviews List */}
                 {reviewsLoading ? (
                     <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
-                        <CircularProgress sx={{ color: '#7c3aed' }} />
+                        <CircularProgress color="primary" />
                     </Box>
                 ) : reviews.length === 0 ? (
                     <Box sx={{ textAlign: 'center', py: 6 }}>
-                        <Typography sx={{ color: '#6b7280', fontWeight: 600 }}>
+                        <Typography sx={{ color: 'text.secondary', fontWeight: 600 }}>
                             No reviews yet. Be the first to review!
                         </Typography>
                     </Box>
@@ -274,17 +340,22 @@ export default function ProductDetailsPage() {
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                         {reviews.map((review) => (
                             <Paper key={review._id} elevation={0} sx={{
-                                p: 3, borderRadius: 3, border: '1px solid #ede9fe', bgcolor: '#fff'
+                                p: 3, borderRadius: 3,
+                                border: '1px solid', borderColor: 'divider',
+                                bgcolor: 'background.paper',
                             }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1.5 }}>
-                                    <Avatar sx={{ bgcolor: '#7c3aed', width: 38, height: 38, fontSize: '14px' }}>
+                                    <Avatar sx={{
+                                        bgcolor: 'primary.main',
+                                        width: 38, height: 38, fontSize: '14px',
+                                    }}>
                                         {review.user?.name?.charAt(0).toUpperCase()}
                                     </Avatar>
                                     <Box>
-                                        <Typography sx={{ fontWeight: 700, color: '#1a1a2e', fontSize: '14px' }}>
+                                        <Typography sx={{ fontWeight: 700, color: 'text.primary', fontSize: '14px' }}>
                                             {review.user?.name}
                                         </Typography>
-                                        <Typography sx={{ color: '#9ca3af', fontSize: '12px' }}>
+                                        <Typography sx={{ color: 'text.disabled', fontSize: '12px' }}>
                                             {new Date(review.createdAt).toLocaleDateString()}
                                         </Typography>
                                     </Box>
@@ -293,7 +364,7 @@ export default function ProductDetailsPage() {
                                     </Box>
                                 </Box>
                                 <Divider sx={{ mb: 1.5 }} />
-                                <Typography sx={{ color: '#4b5563', fontSize: '14px', lineHeight: 1.7 }}>
+                                <Typography sx={{ color: 'text.secondary', fontSize: '14px', lineHeight: 1.7 }}>
                                     {review.comment}
                                 </Typography>
                             </Paper>
@@ -303,5 +374,13 @@ export default function ProductDetailsPage() {
             </Box>
 
         </Container>
+    )
+}
+
+export default function ProductDetailsPage() {
+    return (
+        <ThemeRegistry>
+            <ProductDetailsContent />
+        </ThemeRegistry>
     )
 }
