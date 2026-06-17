@@ -318,11 +318,11 @@ export default function Home() {
                         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
                             <Paper sx={{ p: 3.5, borderRadius: 4, bgcolor: '#F9FAFB', border: '1px solid #e5e7eb' }} elevation={0}>
                                     <Typography sx={{ fontWeight: 800, color: '#303841', mb: 1, fontSize: '16px' }}>Email Address</Typography>
-                                <Typography sx={{ color: '#5A6A75', fontSize: '15px' }}>support@fashion2026.com</Typography>
+                                <Typography sx={{ color: '#5A6A75', fontSize: '15px' }}>ashrafmohamedgad214@gmail.com </Typography>
                             </Paper>
                             <Paper sx={{ p: 3.5, borderRadius: 4, bgcolor: '#F9FAFB', border: '1px solid #e5e7eb' }} elevation={0}>
                                     <Typography sx={{ fontWeight: 800, color: '#303841', mb: 1, fontSize: '16px' }}>Phone Number</Typography>
-                                <Typography sx={{ color: '#5A6A75', fontSize: '15px' }}>+20 123 456 7890</Typography>
+                                <Typography sx={{ color: '#5A6A75', fontSize: '15px' }}>+201553585239</Typography>
                             </Paper>
                             <Paper sx={{ p: 3.5, borderRadius: 4, bgcolor: '#F9FAFB', border: '1px solid #e5e7eb' }} elevation={0}>
                                     <Typography sx={{ fontWeight: 800, color: '#303841', mb: 1, fontSize: '16px' }}>Headquarters</Typography>
