@@ -2,11 +2,11 @@
 
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '@/lib/store'
+import { AppDispatch, RootState } from '@/lib/store' 
 import { fetchProducts } from '@/lib/productsSlice'
 import { fetchCategories } from '@/lib/categoriesSlice'
 import { fetchBrands } from '@/lib/brandsSlice'
-import Product from './_Components/product/Product'
+import ProductComponent from './_Components/product/Product'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -20,15 +20,19 @@ import {
     Button,
     CircularProgress,
     Chip,
-    Paper
+    Paper,
+    TextField
 } from '@mui/material'
+
+import { Product, Category, Brand } from '../lib/types'
 
 export default function Home() {
     const dispatch = useDispatch<AppDispatch>()
-    const { products, loading: productsLoading } = useSelector((state: RootState) => state.products)
-    const { categories } = useSelector((state: RootState) => state.categories)
-    const { brands } = useSelector((state: RootState) => state.brands)
-    const token = useSelector((state: RootState) => state.auth.token)
+    
+    const { products, loading: productsLoading } = useSelector((state: RootState) => (state as any).products || { products: [], loading: true })
+    const { categories } = useSelector((state: RootState) => (state as any).categories || { categories: [] })
+    const { brands } = useSelector((state: RootState) => (state as any).brands || { brands: [] })
+    const token = useSelector((state: RootState) => (state as any).auth?.token)
 
     useEffect(() => {
         dispatch(fetchProducts())
@@ -36,12 +40,10 @@ export default function Home() {
         dispatch(fetchBrands())
     }, [dispatch])
 
-    const featured = products.slice(0, 8)
+    const featured = products?.slice(0, 8) || []
 
     return (
         <Box sx={{ bgcolor: '#F5F5F5', minHeight: '100vh' }}>
-
-            {/*  HERO SECTION  */}
             <Box sx={{
                 background: 'linear-gradient(135deg, #F4F6F8 0%, #E9ECEF 100%)',
                 color: '#303841',
@@ -49,13 +51,11 @@ export default function Home() {
                 overflow: 'hidden',
                 position: 'relative',
             }}>
-
                 <Box sx={{ position: 'absolute', top: -80, right: -80, width: 300, height: 300, borderRadius: '50%', bgcolor: 'rgba(118,171,174,0.12)' }} />
                 <Box sx={{ position: 'absolute', bottom: -60, left: -60, width: 220, height: 220, borderRadius: '50%', bgcolor: 'rgba(255,87,34,0.1)' }} />
 
                 <Container maxWidth="lg">
                     <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: 'center', gap: { xs: 6, md: 8 } }}>
-
                         <Box sx={{ flex: 1, textAlign: { xs: 'center', md: 'left' }, zIndex: 1 }}>
                             <Chip
                                 label="New Collection 2026"
@@ -80,7 +80,6 @@ export default function Home() {
                                     </Button>
                                 )}
                             </Box>
-                            {/* Stats */}
                             <Box sx={{ display: 'flex', gap: 4, mt: 5, justifyContent: { xs: 'center', md: 'flex-start' } }}>
                                 {[
                                     { number: '10K+', label: 'Products' },
@@ -94,19 +93,29 @@ export default function Home() {
                                 ))}
                             </Box>
                         </Box>
-                        {/* Right - Image */}
-                        <Box sx={{ flex: 1, zIndex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                            <Box sx={{ width: { xs: 260, md: 420 }, height: { xs: 260, md: 420 }, borderRadius: '30px', overflow: 'hidden', boxShadow: '0 20px 50px rgba(48,56,65,0.12)', border: '4px solid #fff', bgcolor: '#fff' }}>
-                                <img src="/hero-image.jpg" alt="Fashion Collection" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                            </Box>
+                        
+                        <Box sx={{ 
+                            position: 'relative', 
+                            width: { xs: 260, md: 420 }, 
+                            height: { xs: 260, md: 420 }, 
+                            borderRadius: '30px', 
+                            overflow: 'hidden', 
+                            boxShadow: '0 20px 50px rgba(48,56,65,0.12)', 
+                            border: '4px solid #fff', 
+                            bgcolor: '#fff' 
+                        }}>
+                            <Image 
+                                src="/hero-image.jpg" 
+                                alt="Fashion Collection" 
+                                fill 
+                                priority
+                                style={{ objectFit: 'cover' }} 
+                            />
                         </Box>
                     </Box>
                 </Container>
             </Box>
 
-
-
-            {/*   FEATURED PRODUCTS   */}
             <Box sx={{ py: { xs: 4, md: 8 } }}>
                 <Container maxWidth="xl">
                     <Box sx={{ textAlign: 'center', mb: { xs: 4, md: 6 } }}>
@@ -116,7 +125,7 @@ export default function Home() {
                         </Typography>
                     </Box>
 
-                    {productsLoading || products.length === 0 ? (
+                    {productsLoading || !products || products.length === 0 ? (
                         <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}>
                             <CircularProgress sx={{ color: '#FF5722' }} />
                         </Box>
@@ -136,9 +145,9 @@ export default function Home() {
                                 }}
                                 style={{ paddingBottom: '40px' }}
                             >
-                                {featured.map((product) => (
+                                {featured.map((product: Product) => (
                                     <SwiperSlide key={product._id}>
-                                        <Product p={product} />
+                                        <ProductComponent p={product} />
                                     </SwiperSlide>
                                 ))}
                             </Swiper>
@@ -153,8 +162,6 @@ export default function Home() {
                 </Container>
             </Box>
 
-
-            {/*   CATEGORIES SLIDER   */}
             <Box sx={{ bgcolor: '#fff', py: { xs: 4, md: 6 }, borderBottom: '1px solid #e5e7eb' }}>
                 <Container maxWidth="xl">
                     <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -170,7 +177,7 @@ export default function Home() {
                         modules={[Autoplay]}
                         autoplay={{ delay: 2500, disableOnInteraction: false }}
                         spaceBetween={12}
-                        slidesPerView={2.3} // كارتين وجزء بسيط من الثالث لجمالية الحركة على الموبايل
+                        slidesPerView={2.3} 
                         breakpoints={{
                             500: { slidesPerView: 3, spaceBetween: 16 },
                             768: { slidesPerView: 4, spaceBetween: 16 },
@@ -178,7 +185,7 @@ export default function Home() {
                             1400: { slidesPerView: 6, spaceBetween: 18 },
                         }}
                     >
-                        {categories.map((cat) => (
+                        {categories?.map((cat: Category) => (
                             <SwiperSlide key={cat._id}>
                                 <Box
                                     component={Link}
@@ -202,7 +209,7 @@ export default function Home() {
                                 >
                                     <Box sx={{
                                         width: '100%',
-                                        height: { xs: 110, sm: 130, md: 150 }, // ارتفاع مرن متناسق مع عرض الشاشة
+                                        height: { xs: 110, sm: 130, md: 150 },
                                         borderRadius: 2.5,
                                         overflow: 'hidden',
                                         position: 'relative',
@@ -220,8 +227,6 @@ export default function Home() {
                 </Container>
             </Box>
 
-
-            {/*   BRANDS SLIDER   */}
             <Box sx={{ bgcolor: '#fff', py: { xs: 4, md: 6 }, borderBottom: '1px solid #e5e7eb' }}>
                 <Container maxWidth="xl">
                     <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -245,7 +250,7 @@ export default function Home() {
                             1400: { slidesPerView: 8, spaceBetween: 15 },
                         }}
                     >
-                        {brands.map((brand) => (
+                        {brands?.map((brand: Brand) => (
                             <SwiperSlide key={brand._id}>
                                 <Paper
                                     component={Link}
@@ -270,8 +275,74 @@ export default function Home() {
                 </Container>
             </Box>
 
+            <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#F9FAFB' }}>
+                <Container maxWidth="lg">
+                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: 'center', gap: { xs: 6, md: 10 } }}>
+                        <Box sx={{ flex: 1 }}>
+                            <Chip label="Our Story" sx={{ mb: 2, bgcolor: 'rgba(118,171,174,0.15)', color: '#76ABAE', fontWeight: 600, fontSize: '13px' }} />
+                            <Typography variant="h3" sx={{ fontWeight: 900, color: '#303841', mb: 3, fontSize: { xs: '1.8rem', md: '2.6rem' } }}>
+                                About <Box component="span" sx={{ color: '#FF5722' }}>Our Brand</Box>
+                            </Typography>
+                            <Typography sx={{ color: '#5A6A75', lineHeight: 1.8, mb: 3, fontSize: '15px' }}>
+                                Launched in 2026, we are dedicated to bringing you the finest fashion trends combining exceptional quality with unmatched style. Our mission is to empower individuals to express their unique identity through modern, sustainable, and accessible apparel.
+                            </Typography>
+                            <Typography sx={{ color: '#5A6A75', lineHeight: 1.8, fontSize: '15px' }}>
+                                Every piece in our collection is carefully curated to ensure comfort, durability, and contemporary elegance, delivering premium shopping experiences globally.
+                            </Typography>
+                        </Box>
+                        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3, width: '100%' }}>
+                            <Box sx={{ display: 'flex', gap: 3, flexDirection: { xs: 'column', sm: 'row' } }}>
+                                <Paper sx={{ p: 4, flex: 1, bgcolor: '#fff', borderRadius: 4, border: '1px solid #e5e7eb' }} elevation={0}>
+                                    <Typography sx={{ fontWeight: 800, color: '#FF5722', mb: 1.5, fontSize: '18px' }}>Premium Quality</Typography>
+                                    <Typography variant="body2" sx={{ color: '#7A8B94', lineHeight: 1.6 }}>Crafted from the finest fabrics to ensure absolute comfort and long-lasting wear.</Typography>
+                                </Paper>
+                                <Paper sx={{ p: 4, flex: 1, bgcolor: '#fff', borderRadius: 4, border: '1px solid #e5e7eb' }} elevation={0}>
+                                    <Typography sx={{ fontWeight: 800, color: '#76ABAE', mb: 1.5, fontSize: '18px' }}>Fast Shipping</Typography>
+                                    <Typography variant="body2" sx={{ color: '#7A8B94', lineHeight: 1.6 }}>Swift and safe delivery straight to your doorstep across the region.</Typography>
+                                </Paper>
+                            </Box>
+                        </Box>
+                    </Box>
+                </Container>
+            </Box>
 
-
+            <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#fff' }}>
+                <Container maxWidth="lg">
+                    <Box sx={{ textAlign: 'center', mb: 8 }}>
+                        <Chip label="Get In Touch" sx={{ mb: 2, bgcolor: 'rgba(255,87,34,0.1)', color: '#FF5722', fontWeight: 600, fontSize: '13px' }} />
+                        <Typography sx={{ fontWeight: 900, color: '#303841', fontSize: { xs: '1.8rem', md: '2.6rem' } }}>
+                            Contact <Box component="span" sx={{ color: '#FF5722' }}>Us</Box>
+                        </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 5 }}>
+                        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
+                            <Paper sx={{ p: 3.5, borderRadius: 4, bgcolor: '#F9FAFB', border: '1px solid #e5e7eb' }} elevation={0}>
+                                    <Typography sx={{ fontWeight: 800, color: '#303841', mb: 1, fontSize: '16px' }}>Email Address</Typography>
+                                <Typography sx={{ color: '#5A6A75', fontSize: '15px' }}>support@fashion2026.com</Typography>
+                            </Paper>
+                            <Paper sx={{ p: 3.5, borderRadius: 4, bgcolor: '#F9FAFB', border: '1px solid #e5e7eb' }} elevation={0}>
+                                    <Typography sx={{ fontWeight: 800, color: '#303841', mb: 1, fontSize: '16px' }}>Phone Number</Typography>
+                                <Typography sx={{ color: '#5A6A75', fontSize: '15px' }}>+20 123 456 7890</Typography>
+                            </Paper>
+                            <Paper sx={{ p: 3.5, borderRadius: 4, bgcolor: '#F9FAFB', border: '1px solid #e5e7eb' }} elevation={0}>
+                                    <Typography sx={{ fontWeight: 800, color: '#303841', mb: 1, fontSize: '16px' }}>Headquarters</Typography>
+                                <Typography sx={{ color: '#5A6A75', fontSize: '15px' }}>Cairo, Egypt</Typography>
+                            </Paper>
+                        </Box>
+                        <Box component="form" sx={{ flex: 1.5, display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+                            <Box sx={{ display: 'flex', gap: 2.5, flexDirection: { xs: 'column', sm: 'row' } }}>
+                                <TextField fullWidth placeholder="Your Name" variant="outlined" sx={{ '& .MuiOutlinedInput-root': { borderRadius: 3 } }} />
+                                <TextField fullWidth placeholder="Your Email" variant="outlined" sx={{ '& .MuiOutlinedInput-root': { borderRadius: 3 } }} />
+                            </Box>
+                            <TextField fullWidth placeholder="Subject" variant="outlined" sx={{ '& .MuiOutlinedInput-root': { borderRadius: 3 } }} />
+                            <TextField fullWidth placeholder="Message" multiline rows={4} variant="outlined" sx={{ '& .MuiOutlinedInput-root': { borderRadius: 3 } }} />
+                            <Button variant="contained" size="large" sx={{ bgcolor: '#FF5722', color: '#fff', fontWeight: 800, py: 1.8, borderRadius: 3, textTransform: 'none', fontSize: '15px', '&:hover': { bgcolor: '#e64a19' } }}>
+                                Send Message
+                            </Button>
+                        </Box>
+                    </Box>
+                </Container>
+            </Box>
         </Box>
     )
 }

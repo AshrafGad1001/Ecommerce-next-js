@@ -58,3 +58,9 @@ export interface Order {
         price: number
     }[]
 }
+export interface Brand {
+    _id: string
+    name: string
+    image: string
+    slug?: string
+}

@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
-import './globals.css'
 import Navbar from './_Components/navbar/Navbar'
 import Footer from './_Components/footer/Footer'
 import ThemeRegistry from './_Components/ThemeRegistry'
 import ReduxProvider from './_Components/ReduxProvider'
 import { Toaster } from 'react-hot-toast'
+import './globals.css'
+
 export const metadata: Metadata = {
   title: 'MyApp | E-Commerce',
   description: 'Best products at the best prices',
@@ -21,11 +22,11 @@ export default function RootLayout({
         <ReduxProvider>
           <ThemeRegistry>
             <Navbar />
-            <main style={{ flex: 1 }}>
+            <main style={{ flex: 1, paddingTop: '80px' }}>
               {children}
             </main>
             <Footer />
-               <Toaster position="bottom-right" />
+            <Toaster position="bottom-right" />
           </ThemeRegistry>
         </ReduxProvider>
       </body>
