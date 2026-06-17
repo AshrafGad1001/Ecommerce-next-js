@@ -5,20 +5,38 @@ import { RootState, AppDispatch } from '@/lib/store'
 import { logout } from '@/lib/authSlice'
 import { useRouter } from 'next/navigation'
 import {
-    Box, Container, Typography, Paper,
-    Avatar, Button, Divider, Chip
+    Box,
+    Container,
+    Typography,
+    Paper,
+    Avatar,
+    Button,
+    Divider,
+    Chip,
 } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 import LogoutIcon from '@mui/icons-material/Logout'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import PersonIcon from '@mui/icons-material/Person'
 import Link from 'next/link'
 
 export default function ProfilePage() {
+    const theme = useTheme()
+
     const dispatch = useDispatch<AppDispatch>()
     const router = useRouter()
-    const username = useSelector((state: RootState) => state.auth.username)
-    const cartCount = useSelector((state: RootState) => state.cart.cartCount)
-    const cartData = useSelector((state: RootState) => state.cart.cartData)
+
+    const username = useSelector(
+        (state: RootState) => state.auth.username
+    )
+
+    const cartCount = useSelector(
+        (state: RootState) => state.cart.cartCount
+    )
+
+    const cartData = useSelector(
+        (state: RootState) => state.cart.cartData
+    )
 
     function handleLogout() {
         dispatch(logout())
@@ -26,75 +44,134 @@ export default function ProfilePage() {
     }
 
     return (
-        <Box sx={{ minHeight: '100vh', bgcolor: '#f8f7ff', py: 8 }}>
+        <Box
+            sx={{
+                minHeight: '100vh',
+                bgcolor: theme.palette.background.default,
+                py: 8,
+            }}
+        >
             <Container maxWidth="sm">
-
-                {/* Profile Card */}
-                <Paper elevation={0} sx={{
-                    p: 5,
-                    borderRadius: 4,
-                    border: '1px solid #ede9fe',
-                    bgcolor: '#fff',
-                    textAlign: 'center',
-                    mb: 3,
-                }}>
-                    {/* Avatar */}
-                    <Avatar sx={{
-                        width: 90,
-                        height: 90,
-                        bgcolor: '#7c3aed',
-                        fontSize: '2rem',
-                        fontWeight: 800,
-                        mx: 'auto',
-                        mb: 2,
-                    }}>
+                <Paper
+                    elevation={0}
+                    sx={{
+                        p: 5,
+                        borderRadius: 4,
+                        border: `1px solid ${theme.palette.divider}`,
+                        bgcolor: theme.palette.background.paper,
+                        textAlign: 'center',
+                        mb: 3,
+                    }}
+                >
+                    <Avatar
+                        sx={{
+                            width: 90,
+                            height: 90,
+                            bgcolor: theme.palette.primary.main,
+                            fontSize: '2rem',
+                            fontWeight: 800,
+                            mx: 'auto',
+                            mb: 2,
+                        }}
+                    >
                         {username?.charAt(0).toUpperCase()}
                     </Avatar>
 
-                    <Typography variant="h5" sx={{ fontWeight: 800, color: '#1a1a2e', mb: 0.5 }}>
+                    <Typography
+                        variant="h5"
+                        sx={{
+                            fontWeight: 800,
+                            color: theme.palette.text.primary,
+                            mb: 0.5,
+                        }}
+                    >
                         {username}
                     </Typography>
 
                     <Chip
                         label="Active Member"
                         size="small"
-                        sx={{ bgcolor: '#ede9fe', color: '#7c3aed', fontWeight: 600, mb: 3 }}
+                        sx={{
+                            bgcolor: `${theme.palette.primary.main}15`,
+                            color: theme.palette.primary.main,
+                            fontWeight: 600,
+                            mb: 3,
+                        }}
                     />
 
                     <Divider sx={{ mb: 3 }} />
 
-                    {/* Stats */}
-                    <Box sx={{ display: 'flex', justifyContent: 'center', gap: 6 }}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            gap: 6,
+                        }}
+                    >
                         <Box>
-                            <Typography variant="h5" sx={{ fontWeight: 900, color: '#7c3aed' }}>
+                            <Typography
+                                variant="h5"
+                                sx={{
+                                    fontWeight: 900,
+                                    color: theme.palette.primary.main,
+                                }}
+                            >
                                 {cartCount}
                             </Typography>
-                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+
+                            <Typography
+                                variant="body2"
+                                sx={{
+                                    color: theme.palette.text.secondary,
+                                }}
+                            >
                                 Cart Items
                             </Typography>
                         </Box>
+
                         <Box>
-                            <Typography variant="h5" sx={{ fontWeight: 900, color: '#7c3aed' }}>
+                            <Typography
+                                variant="h5"
+                                sx={{
+                                    fontWeight: 900,
+                                    color: theme.palette.primary.main,
+                                }}
+                            >
                                 {cartData?.data?.totalCartPrice ?? 0}
                             </Typography>
-                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+
+                            <Typography
+                                variant="body2"
+                                sx={{
+                                    color: theme.palette.text.secondary,
+                                }}
+                            >
                                 Total EGP
                             </Typography>
                         </Box>
                     </Box>
                 </Paper>
 
-                {/* Actions */}
-                <Paper elevation={0} sx={{
-                    p: 3,
-                    borderRadius: 4,
-                    border: '1px solid #ede9fe',
-                    bgcolor: '#fff',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 2,
-                }}>
-                    <Typography variant="body2" sx={{ fontWeight: 700, color: 'text.secondary', mb: 1 }}>
+                <Paper
+                    elevation={0}
+                    sx={{
+                        p: 3,
+                        borderRadius: 4,
+                        border: `1px solid ${theme.palette.divider}`,
+                        bgcolor: theme.palette.background.paper,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2,
+                    }}
+                >
+                    <Typography
+                        variant="body2"
+                        sx={{
+                            fontWeight: 700,
+                            color: theme.palette.text.secondary,
+                            mb: 1,
+                        }}
+                    >
                         QUICK ACTIONS
                     </Typography>
 
@@ -105,22 +182,33 @@ export default function ProfilePage() {
                         startIcon={<ShoppingCartIcon />}
                         sx={{
                             justifyContent: 'flex-start',
-                            color: '#1a1a2e',
+                            color: theme.palette.text.primary,
                             fontWeight: 600,
                             textTransform: 'none',
                             py: 1.5,
                             px: 2,
                             borderRadius: 2,
-                            border: '1px solid #e5e7eb',
-                            '&:hover': { bgcolor: '#f5f3ff', borderColor: '#7c3aed' },
+                            border: `1px solid ${theme.palette.divider}`,
+
+                            '&:hover': {
+                                bgcolor: theme.palette.background.default,
+                                borderColor: theme.palette.primary.main,
+                            },
                         }}
                     >
                         View My Cart
+
                         {cartCount > 0 && (
                             <Chip
                                 label={cartCount}
                                 size="small"
-                                sx={{ ml: 'auto', bgcolor: '#7c3aed', color: '#fff', fontWeight: 700, height: 22 }}
+                                sx={{
+                                    ml: 'auto',
+                                    bgcolor: theme.palette.primary.main,
+                                    color: '#fff',
+                                    fontWeight: 700,
+                                    height: 22,
+                                }}
                             />
                         )}
                     </Button>
@@ -132,14 +220,18 @@ export default function ProfilePage() {
                         startIcon={<PersonIcon />}
                         sx={{
                             justifyContent: 'flex-start',
-                            color: '#1a1a2e',
+                            color: theme.palette.text.primary,
                             fontWeight: 600,
                             textTransform: 'none',
                             py: 1.5,
                             px: 2,
                             borderRadius: 2,
-                            border: '1px solid #e5e7eb',
-                            '&:hover': { bgcolor: '#f5f3ff', borderColor: '#7c3aed' },
+                            border: `1px solid ${theme.palette.divider}`,
+
+                            '&:hover': {
+                                bgcolor: theme.palette.background.default,
+                                borderColor: theme.palette.primary.main,
+                            },
                         }}
                     >
                         Browse Products
@@ -153,20 +245,23 @@ export default function ProfilePage() {
                         startIcon={<LogoutIcon />}
                         sx={{
                             justifyContent: 'flex-start',
-                            color: '#ef4444',
+                            color: theme.palette.error.main,
                             fontWeight: 600,
                             textTransform: 'none',
                             py: 1.5,
                             px: 2,
                             borderRadius: 2,
-                            border: '1px solid #fecaca',
-                            '&:hover': { bgcolor: '#fef2f2', borderColor: '#ef4444' },
+                            border: `1px solid ${theme.palette.error.light}`,
+
+                            '&:hover': {
+                                bgcolor: `${theme.palette.error.main}10`,
+                                borderColor: theme.palette.error.main,
+                            },
                         }}
                     >
                         Logout
                     </Button>
                 </Paper>
-
             </Container>
         </Box>
     )

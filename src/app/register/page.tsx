@@ -15,21 +15,37 @@ import {
     Alert,
     Paper,
 } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 import Link from 'next/link'
 
 const validationSchema = Yup.object({
-    name: Yup.string().min(3, 'Minimum 3 characters').required('Name is required'),
-    email: Yup.string().email('Invalid email').required('Email is required'),
-    password: Yup.string().min(6, 'Minimum 6 characters').required('Password is required'),
+    name: Yup.string()
+        .min(3, 'Minimum 3 characters')
+        .required('Name is required'),
+
+    email: Yup.string()
+        .email('Invalid email')
+        .required('Email is required'),
+
+    password: Yup.string()
+        .min(6, 'Minimum 6 characters')
+        .required('Password is required'),
+
     rePassword: Yup.string()
         .oneOf([Yup.ref('password')], 'Passwords do not match')
         .required('Confirm password is required'),
+
     phone: Yup.string()
-        .matches(/^01[0125][0-9]{8}$/, 'Invalid Egyptian phone number')
+        .matches(
+            /^01[0125][0-9]{8}$/,
+            'Invalid Egyptian phone number'
+        )
         .required('Phone is required'),
 })
 
 export default function RegisterPage() {
+    const theme = useTheme()
+
     const router = useRouter()
     const [error, setError] = useState('')
     const [success, setSuccess] = useState(false)
@@ -42,65 +58,126 @@ export default function RegisterPage() {
             rePassword: '',
             phone: '',
         },
+
         validationSchema,
+
         async onSubmit(values) {
             setError('')
+
             try {
                 await axios.post(
                     'https://ecommerce.routemisr.com/api/v1/auth/signup',
                     values
                 )
+
                 setSuccess(true)
-                setTimeout(() => router.push('/login'), 1500)
+
+                setTimeout(() => {
+                    router.push('/login')
+                }, 1500)
             } catch (err: any) {
-                setError(err.response?.data?.message || 'Registration failed')
+                setError(
+                    err.response?.data?.message ||
+                    'Registration failed'
+                )
             }
         },
     })
 
     return (
-        <Box sx={{ minHeight: '100vh', bgcolor: '#f8f7ff', display: 'flex', alignItems: 'center', py: 6 }}>
+        <Box
+            sx={{
+                minHeight: '100vh',
+                bgcolor: theme.palette.background.default,
+                display: 'flex',
+                alignItems: 'center',
+                py: 6,
+            }}
+        >
             <Container maxWidth="sm">
-                <Paper elevation={0} sx={{
-                    p: 5,
-                    borderRadius: 4,
-                    border: '1px solid #ede9fe',
-                    bgcolor: '#fff',
-                }}>
-
-                    {/* Header */}
-                    <Box sx={{ textAlign: 'center', mb: 4 }}>
-                        <Typography variant="h4" sx={{ fontWeight: 800, color: '#1a1a2e', mb: 1 }}>
-                            Create Account 
+                <Paper
+                    elevation={0}
+                    sx={{
+                        p: 5,
+                        borderRadius: 4,
+                        border: `1px solid ${theme.palette.divider}`,
+                        bgcolor: theme.palette.background.paper,
+                    }}
+                >
+                    <Box
+                        sx={{
+                            textAlign: 'center',
+                            mb: 4,
+                        }}
+                    >
+                        <Typography
+                            variant="h4"
+                            sx={{
+                                fontWeight: 800,
+                                color: theme.palette.text.primary,
+                                mb: 1,
+                            }}
+                        >
+                            Create Account
                         </Typography>
-                       
+
+                        <Typography
+                            variant="body2"
+                            sx={{
+                                color: theme.palette.text.secondary,
+                            }}
+                        >
+                            Create your new account and start shopping
+                        </Typography>
                     </Box>
 
-                    {/* Error */}
                     {error && (
-                        <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
+                        <Alert
+                            severity="error"
+                            sx={{
+                                mb: 3,
+                                borderRadius: 2,
+                            }}
+                        >
                             {error}
                         </Alert>
                     )}
 
-                    {/* Success */}
                     {success && (
-                        <Alert severity="success" sx={{ mb: 3, borderRadius: 2 }}>
+                        <Alert
+                            severity="success"
+                            sx={{
+                                mb: 3,
+                                borderRadius: 2,
+                            }}
+                        >
                             Account created! Redirecting to login...
                         </Alert>
                     )}
 
-                    {/* Form */}
-                    <Box component="form" onSubmit={formik.handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-
+                    <Box
+                        component="form"
+                        onSubmit={formik.handleSubmit}
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 3,
+                        }}
+                    >
                         <TextField
                             label="Full Name"
                             name="name"
                             value={formik.values.name}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            error={formik.touched.name && Boolean(formik.errors.name)}
-                            helperText={formik.touched.name && formik.errors.name}
+                            error={
+                                formik.touched.name &&
+                                Boolean(formik.errors.name)
+                            }
+                            helperText={
+                                formik.touched.name &&
+                                formik.errors.name
+                            }
                             fullWidth
                         />
 
@@ -111,8 +188,14 @@ export default function RegisterPage() {
                             value={formik.values.email}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            error={formik.touched.email && Boolean(formik.errors.email)}
-                            helperText={formik.touched.email && formik.errors.email}
+                            error={
+                                formik.touched.email &&
+                                Boolean(formik.errors.email)
+                            }
+                            helperText={
+                                formik.touched.email &&
+                                formik.errors.email
+                            }
                             fullWidth
                         />
 
@@ -122,8 +205,14 @@ export default function RegisterPage() {
                             value={formik.values.phone}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            error={formik.touched.phone && Boolean(formik.errors.phone)}
-                            helperText={formik.touched.phone && formik.errors.phone}
+                            error={
+                                formik.touched.phone &&
+                                Boolean(formik.errors.phone)
+                            }
+                            helperText={
+                                formik.touched.phone &&
+                                formik.errors.phone
+                            }
                             fullWidth
                         />
 
@@ -134,8 +223,14 @@ export default function RegisterPage() {
                             value={formik.values.password}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            error={formik.touched.password && Boolean(formik.errors.password)}
-                            helperText={formik.touched.password && formik.errors.password}
+                            error={
+                                formik.touched.password &&
+                                Boolean(formik.errors.password)
+                            }
+                            helperText={
+                                formik.touched.password &&
+                                formik.errors.password
+                            }
                             fullWidth
                         />
 
@@ -146,8 +241,14 @@ export default function RegisterPage() {
                             value={formik.values.rePassword}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            error={formik.touched.rePassword && Boolean(formik.errors.rePassword)}
-                            helperText={formik.touched.rePassword && formik.errors.rePassword}
+                            error={
+                                formik.touched.rePassword &&
+                                Boolean(formik.errors.rePassword)
+                            }
+                            helperText={
+                                formik.touched.rePassword &&
+                                formik.errors.rePassword
+                            }
                             fullWidth
                         />
 
@@ -157,31 +258,51 @@ export default function RegisterPage() {
                             size="large"
                             disabled={formik.isSubmitting}
                             sx={{
-                                bgcolor: '#7c3aed',
+                                bgcolor: theme.palette.primary.main,
                                 borderRadius: 3,
                                 py: 1.5,
                                 fontWeight: 700,
                                 fontSize: '15px',
                                 textTransform: 'none',
-                                '&:hover': { bgcolor: '#6d28d9' },
+
+                                '&:hover': {
+                                    bgcolor: theme.palette.primary.dark,
+                                },
                             }}
                         >
-                            {formik.isSubmitting
-                                ? <CircularProgress size={22} sx={{ color: '#fff' }} />
-                                : 'Create Account'
-                            }
+                            {formik.isSubmitting ? (
+                                <CircularProgress
+                                    size={22}
+                                    sx={{
+                                        color: '#fff',
+                                    }}
+                                />
+                            ) : (
+                                'Create Account'
+                            )}
                         </Button>
-
                     </Box>
 
-                    {/* Footer */}
-                    <Typography variant="body2" sx={{ textAlign: 'center', mt: 3, color: 'text.secondary' }}>
+                    <Typography
+                        variant="body2"
+                        sx={{
+                            textAlign: 'center',
+                            mt: 3,
+                            color: theme.palette.text.secondary,
+                        }}
+                    >
                         Already have an account?{' '}
-                        <Link href="/login" style={{ color: '#7c3aed', fontWeight: 600, textDecoration: 'none' }}>
+                        <Link
+                            href="/login"
+                            style={{
+                                color: theme.palette.primary.main,
+                                fontWeight: 600,
+                                textDecoration: 'none',
+                            }}
+                        >
                             Login
                         </Link>
                     </Typography>
-
                 </Paper>
             </Container>
         </Box>
