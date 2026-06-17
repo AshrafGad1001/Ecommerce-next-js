@@ -61,10 +61,21 @@ export default function Navbar() {
 
     return (
         <>
-            <AppBar position="static" elevation={0} sx={{
-                bgcolor: '#303841',
-                borderBottom: '1px solid #252d35',
-            }}>
+            <AppBar 
+                position="fixed"
+                elevation={3}
+                sx={{
+                    bgcolor: '#303841',
+                    borderRadius: { xs: '16px', md: '24px' },
+                    mx: { xs: 1, md: 2 },
+                    mt: { xs: 1, md: 1 },
+                    width: 'auto',
+                    left: 0,
+                    right: 0,
+                    overflow: 'hidden',
+                    zIndex: 1100,
+                }}
+            >
                 <Toolbar>
 
                     {/* Logo */}
@@ -99,24 +110,26 @@ export default function Navbar() {
                     <Box sx={{
                         display: { xs: 'none', md: 'flex' },
                         alignItems: 'center',
-                        bgcolor: 'rgba(255,255,255,0.08)',
+                        bgcolor: '#F5F5F5',
                         borderRadius: '999px',
                         px: 2,
                         py: 0.5,
                         mr: 2,
-                        border: '1px solid rgba(255,255,255,0.1)',
-                        '&:focus-within': { borderColor: '#76ABAE' },
-                        transition: 'border-color 0.2s ease',
+                        border: '1px solid rgba(0,0,0,0.05)',
+                        '&:focus-within': { borderColor: '#76ABAE', bgcolor: '#FFFFFF' },
+                        transition: 'all 0.2s ease',
                     }}>
-                        <SearchIcon sx={{ color: 'rgba(255,255,255,0.5)', fontSize: 18, mr: 1 }} />
+                        <SearchIcon sx={{ color: 'rgba(48, 56, 65, 0.6)', fontSize: 18, mr: 1 }} />
                         <InputBase
                             placeholder="Search products..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onKeyDown={handleSearch}
                             sx={{
-                                fontSize: '14px', width: 180, color: '#F5F5F5',
-                                '& input::placeholder': { color: 'rgba(255,255,255,0.4)' }
+                                fontSize: '14px', 
+                                width: 180, 
+                                color: '#303841',
+                                '& input::placeholder': { color: 'rgba(48, 56, 65, 0.5)', opacity: 1 } 
                             }}
                         />
                     </Box>
@@ -161,6 +174,7 @@ export default function Navbar() {
                                     sx={{
                                         color: 'rgba(255,255,255,0.7)',
                                         '&:hover': { color: '#FF5722', bgcolor: 'rgba(255,87,34,0.1)' },
+                                        transition: 'all 0.2s ease',
                                     }}
                                 >
                                     <LogoutIcon />
@@ -234,16 +248,16 @@ export default function Navbar() {
                     <Box sx={{
                         display: { xs: 'flex', md: 'none' },
                         alignItems: 'center',
-                        bgcolor: 'rgba(255,255,255,0.08)',
+                        bgcolor: '#F5F5F5', 
                         mx: 2,
                         mb: 1.5,
                         px: 2,
                         py: 0.5,
                         borderRadius: '999px',
-                        border: '1px solid rgba(255,255,255,0.1)',
-                        '&:focus-within': { borderColor: '#76ABAE' },
+                        border: '1px solid rgba(0,0,0,0.05)',
+                        '&:focus-within': { borderColor: '#76ABAE', bgcolor: '#FFFFFF' },
                     }}>
-                        <SearchIcon sx={{ color: 'rgba(255,255,255,0.5)', fontSize: 18, mr: 1 }} />
+                        <SearchIcon sx={{ color: 'rgba(48, 56, 65, 0.6)', fontSize: 18, mr: 1 }} />
                         <InputBase
                             autoFocus
                             fullWidth
@@ -253,8 +267,8 @@ export default function Navbar() {
                             onKeyDown={handleSearch}
                             sx={{
                                 fontSize: '14px',
-                                color: '#F5F5F5',
-                                '& input::placeholder': { color: 'rgba(255,255,255,0.4)' }
+                                color: '#303841',
+                                '& input::placeholder': { color: 'rgba(48, 56, 65, 0.5)' }
                             }}
                         />
                     </Box>

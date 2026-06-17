@@ -114,9 +114,6 @@ export default function Home() {
                         <Typography sx={{ fontWeight: 800, color: '#303841', fontSize: { xs: '1.6rem', md: '2.2rem' } }}>
                             Top <Box component="span" sx={{ color: '#FF5722' }}>Products</Box>
                         </Typography>
-                        <Typography sx={{ color: '#76ABAE', mt: 0.5, fontWeight: 500, fontSize: { xs: '12px', md: '14px' } }}>
-                            Hand-picked products just for you
-                        </Typography>
                     </Box>
 
                     {productsLoading || products.length === 0 ? (

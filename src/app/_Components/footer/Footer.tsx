@@ -13,7 +13,17 @@ export default function Footer() {
     return (
         <Box
             component="footer"
-            sx={{ bgcolor: '#303841', color: '#F5F5F5', pt: 4, pb: 2 }}
+            sx={{ 
+                bgcolor: '#303841', 
+                color: '#F5F5F5', 
+                pt: 4, 
+                pb: 2,
+                borderRadius: { xs: '16px', md: '24px' },
+                mx: { xs: 1, md: 2 },                    
+                mb: { xs: 1, md: 2 },                    
+                mt: { xs: 6, md: 8 },                    
+                overflow: 'hidden'
+            }}
         >
             <Box sx={{
                 maxWidth: '1200px',
