@@ -25,11 +25,7 @@ export default function CheckoutPage() {
 
     const [paymentMethod, setPaymentMethod] = useState<'cash' | 'online'>('cash')
     const [submitting, setSubmitting] = useState(false)
-    const [form, setForm] = useState({
-        details: '',
-        phone: '',
-        city: '',
-    })
+    const [form, setForm] = useState({ details: '', phone: '', city: '' })
 
     useEffect(() => {
         dispatch(fetchCart())
@@ -50,7 +46,6 @@ export default function CheckoutPage() {
             toast.error('Your cart is empty!')
             return
         }
-
         setSubmitting(true)
         try {
             if (paymentMethod === 'cash') {
@@ -60,8 +55,8 @@ export default function CheckoutPage() {
                     { headers: { token } }
                 )
                 toast.success('Order placed successfully!', {
-                    style: { borderRadius: '10px', background: '#1a1a2e', color: '#fff', fontWeight: 600 },
-                    iconTheme: { primary: '#7c3aed', secondary: '#fff' },
+                    style: { borderRadius: '10px', background: '#303841', color: '#fff', fontWeight: 600 },
+                    iconTheme: { primary: '#FF5722', secondary: '#fff' },
                 })
                 router.push('/orders')
             } else {
@@ -85,7 +80,7 @@ export default function CheckoutPage() {
 
     if (!cartData || cartData.data.products.length === 0) return (
         <Box sx={{
-            minHeight: '100vh', bgcolor: '#f8f7ff',
+            minHeight: '100vh', bgcolor: '#F5F5F5',
             display: 'flex', flexDirection: 'column',
             alignItems: 'center', justifyContent: 'center', gap: 3
         }}>
@@ -94,18 +89,16 @@ export default function CheckoutPage() {
             </Typography>
             <Chip
                 label="Browse Products"
-                component={Link}
-                href="/products"
-                clickable
-                sx={{ bgcolor: '#7c3aed', color: '#fff', fontWeight: 600, px: 2, py: 2.5 }}
+                component={Link} href="/products" clickable
+                sx={{ bgcolor: '#FF5722', color: '#fff', fontWeight: 600, px: 2, py: 2.5 }}
             />
         </Box>
     )
 
     return (
-        <Box sx={{ minHeight: '100vh', bgcolor: '#f8f7ff', py: 8 }}>
+        <Box sx={{ minHeight: '100vh', bgcolor: '#F5F5F5', py: 8 }}>
             <Container maxWidth="lg">
-                <Typography variant="h4" sx={{ fontWeight: 800, color: '#1a1a2e', mb: 5 }}>
+                <Typography variant="h4" sx={{ fontWeight: 800, color: '#303841', mb: 5 }}>
                     Checkout
                 </Typography>
 
@@ -114,68 +107,42 @@ export default function CheckoutPage() {
                     {/* Left - Form */}
                     <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
 
-                        {/* Shipping Address */}
-                        <Paper elevation={0} sx={{ p: 3, borderRadius: 3, border: '1px solid #ede9fe', bgcolor: '#fff' }}>
+                        <Paper elevation={0} sx={{ p: 3, borderRadius: 3, border: '1px solid #e5e7eb', bgcolor: '#fff' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
-                                <LocalShippingOutlinedIcon sx={{ color: '#7c3aed' }} />
-                                <Typography sx={{ fontWeight: 700, color: '#1a1a2e' }}>
+                                <LocalShippingOutlinedIcon sx={{ color: '#FF5722' }} />
+                                <Typography sx={{ fontWeight: 700, color: '#303841' }}>
                                     Shipping Address
                                 </Typography>
                             </Box>
-
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                                <TextField
-                                    label="Address Details"
-                                    name="details"
-                                    value={form.details}
-                                    onChange={handleChange}
-                                    fullWidth
-                                    placeholder="Street, Building, Floor..."
-                                />
-                                <TextField
-                                    label="City"
-                                    name="city"
-                                    value={form.city}
-                                    onChange={handleChange}
-                                    fullWidth
-                                    placeholder="Cairo"
-                                />
-                                <TextField
-                                    label="Phone"
-                                    name="phone"
-                                    value={form.phone}
-                                    onChange={handleChange}
-                                    fullWidth
-                                    placeholder="01xxxxxxxxx"
-                                />
+                                <TextField label="Address Details" name="details" value={form.details} onChange={handleChange} fullWidth placeholder="Street, Building, Floor..." />
+                                <TextField label="City" name="city" value={form.city} onChange={handleChange} fullWidth placeholder="Cairo" />
+                                <TextField label="Phone" name="phone" value={form.phone} onChange={handleChange} fullWidth placeholder="01xxxxxxxxx" />
                             </Box>
                         </Paper>
 
-                        {/* Payment Method */}
-                        <Paper elevation={0} sx={{ p: 3, borderRadius: 3, border: '1px solid #ede9fe', bgcolor: '#fff' }}>
+                        <Paper elevation={0} sx={{ p: 3, borderRadius: 3, border: '1px solid #e5e7eb', bgcolor: '#fff' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
-                                <CreditCardIcon sx={{ color: '#7c3aed' }} />
-                                <Typography sx={{ fontWeight: 700, color: '#1a1a2e' }}>
+                                <CreditCardIcon sx={{ color: '#FF5722' }} />
+                                <Typography sx={{ fontWeight: 700, color: '#303841' }}>
                                     Payment Method
                                 </Typography>
                             </Box>
-
                             <ToggleButtonGroup
-                                value={paymentMethod}
-                                exclusive
+                                value={paymentMethod} exclusive
                                 onChange={(_, val) => val && setPaymentMethod(val)}
                                 fullWidth
                             >
                                 <ToggleButton value="cash" sx={{
                                     py: 1.5, fontWeight: 600, textTransform: 'none',
-                                    '&.Mui-selected': { bgcolor: '#ede9fe', color: '#7c3aed', borderColor: '#7c3aed' }
+                                    '&.Mui-selected': { bgcolor: 'rgba(255,87,34,0.1)', color: '#FF5722', borderColor: '#FF5722' }
                                 }}>
                                     <MoneyIcon sx={{ mr: 1 }} />
                                     Cash on Delivery
                                 </ToggleButton>
                                 <ToggleButton value="online" sx={{
                                     py: 1.5, fontWeight: 600, textTransform: 'none',
-                                    '&.Mui-selected': { bgcolor: '#ede9fe', color: '#7c3aed', borderColor: '#7c3aed' }
+                                    '&.Mui-selected': { bgcolor: 'rgba(118,171,174,0.1)', color: '#76ABAE', borderColor: '#76ABAE' }
                                 }}>
                                     <CreditCardIcon sx={{ mr: 1 }} />
                                     Online Payment
@@ -184,13 +151,13 @@ export default function CheckoutPage() {
                         </Paper>
                     </Box>
 
-                    {/* Right - Order Summary */}
+                    {/* Right - Summary */}
                     <Box sx={{ width: { xs: '100%', lg: 340 } }}>
                         <Paper elevation={0} sx={{
-                            p: 3, borderRadius: 3, border: '1px solid #ede9fe',
+                            p: 3, borderRadius: 3, border: '1px solid #e5e7eb',
                             bgcolor: '#fff', position: 'sticky', top: 20,
                         }}>
-                            <Typography variant="h6" sx={{ fontWeight: 800, color: '#1a1a2e', mb: 3 }}>
+                            <Typography variant="h6" sx={{ fontWeight: 800, color: '#303841', mb: 3 }}>
                                 Order Summary
                             </Typography>
 
@@ -211,21 +178,18 @@ export default function CheckoutPage() {
 
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 4 }}>
                                 <Typography sx={{ fontWeight: 800 }}>Total</Typography>
-                                <Typography sx={{ fontWeight: 800, color: '#7c3aed' }}>
+                                <Typography sx={{ fontWeight: 800, color: '#FF5722' }}>
                                     {cartData.data.totalCartPrice} EGP
                                 </Typography>
                             </Box>
 
                             <Button
-                                fullWidth
-                                variant="contained"
-                                size="large"
-                                onClick={handleSubmit}
-                                disabled={submitting}
+                                fullWidth variant="contained" size="large"
+                                onClick={handleSubmit} disabled={submitting}
                                 sx={{
-                                    bgcolor: '#7c3aed', color: '#fff', fontWeight: 700,
+                                    bgcolor: '#FF5722', color: '#fff', fontWeight: 700,
                                     textTransform: 'none', borderRadius: 3, py: 1.5, fontSize: '15px',
-                                    '&:hover': { bgcolor: '#6d28d9' },
+                                    '&:hover': { bgcolor: '#e64a19' },
                                 }}
                             >
                                 {submitting
@@ -235,7 +199,6 @@ export default function CheckoutPage() {
                             </Button>
                         </Paper>
                     </Box>
-
                 </Box>
             </Container>
         </Box>

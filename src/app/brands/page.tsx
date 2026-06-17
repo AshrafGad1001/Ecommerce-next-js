@@ -20,24 +20,23 @@ export default function BrandsPage() {
     }, [dispatch])
 
     return (
-        <Box sx={{ minHeight: '100vh', bgcolor: '#f8f7ff', py: 8 }}>
+        <Box sx={{ minHeight: '100vh', bgcolor: '#F5F5F5', py: 8 }}>
             <Container maxWidth="xl">
 
-                {/* Header */}
                 <Box sx={{ textAlign: 'center', mb: 6 }}>
                     <Chip
                         label="Our Brands"
-                        sx={{ mb: 2, bgcolor: '#ede9fe', color: '#7c3aed', fontWeight: 600 }}
+                        sx={{ mb: 2, bgcolor: 'rgba(255,87,34,0.1)', color: '#FF5722', fontWeight: 600 }}
                     />
-                    <Typography variant="h3" sx={{ fontWeight: 800, color: '#1a1a2e' }}>
+                    <Typography variant="h3" sx={{ fontWeight: 800, color: '#303841' }}>
                         Top{' '}
-                        <Box component="span" sx={{ color: '#7c3aed' }}>Brands</Box>
+                        <Box component="span" sx={{ color: '#FF5722' }}>Brands</Box>
                     </Typography>
                 </Box>
 
                 {loading ? (
                     <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}>
-                        <CircularProgress sx={{ color: '#7c3aed' }} />
+                        <CircularProgress sx={{ color: '#FF5722' }} />
                     </Box>
                 ) : (
                     <Grid container spacing={3}>
@@ -55,14 +54,14 @@ export default function BrandsPage() {
                                         gap: 1.5,
                                         p: 3,
                                         borderRadius: 3,
-                                        border: '1px solid #ede9fe',
+                                        border: '1px solid #e5e7eb',
                                         bgcolor: '#fff',
                                         textDecoration: 'none',
-                                        transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+                                        transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease',
                                         '&:hover': {
                                             transform: 'translateY(-4px)',
-                                            boxShadow: '0 12px 28px rgba(124,58,237,0.12)',
-                                            borderColor: '#7c3aed',
+                                            boxShadow: '0 12px 28px rgba(48,56,65,0.12)',
+                                            borderColor: '#76ABAE',
                                         },
                                     }}
                                 >
@@ -76,7 +75,7 @@ export default function BrandsPage() {
                                             />
                                         )}
                                     </Box>
-                                    <Typography sx={{ fontWeight: 700, color: '#1a1a2e', fontSize: '14px', textAlign: 'center' }}>
+                                    <Typography sx={{ fontWeight: 700, color: '#303841', fontSize: '14px', textAlign: 'center' }}>
                                         {brand.name}
                                     </Typography>
                                 </Paper>
