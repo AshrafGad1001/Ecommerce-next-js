@@ -61,7 +61,10 @@ export default function Navbar() {
 
     return (
         <>
-            <AppBar position="static" elevation={0} sx={{ bgcolor: '#EDEDE9', borderBottom: '1px solid #d6d5d0' }}>
+            <AppBar position="static" elevation={0} sx={{
+                bgcolor: '#303841',
+                borderBottom: '1px solid #252d35',
+            }}>
                 <Toolbar>
 
                     {/* Logo */}
@@ -76,7 +79,13 @@ export default function Navbar() {
                                 key={link.href}
                                 component={Link}
                                 href={link.href}
-                                sx={{ color: '#1a1a2e', fontWeight: 600, textTransform: 'none', '&:hover': { bgcolor: 'rgba(0,0,0,0.05)' } }}
+                                sx={{
+                                    color: '#F5F5F5',
+                                    fontWeight: 600,
+                                    textTransform: 'none',
+                                    '&:hover': { bgcolor: 'rgba(255,255,255,0.08)', color: '#76ABAE' },
+                                    transition: 'all 0.2s ease',
+                                }}
                             >
                                 {link.label}
                             </Button>
@@ -90,22 +99,25 @@ export default function Navbar() {
                     <Box sx={{
                         display: { xs: 'none', md: 'flex' },
                         alignItems: 'center',
-                        bgcolor: '#f3f4f6',
+                        bgcolor: 'rgba(255,255,255,0.08)',
                         borderRadius: '999px',
                         px: 2,
                         py: 0.5,
                         mr: 2,
-                        border: '1px solid #e5e7eb',
-                        '&:focus-within': { borderColor: '#7c3aed' },
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        '&:focus-within': { borderColor: '#76ABAE' },
                         transition: 'border-color 0.2s ease',
                     }}>
-                        <SearchIcon sx={{ color: '#9ca3af', fontSize: 18, mr: 1 }} />
+                        <SearchIcon sx={{ color: 'rgba(255,255,255,0.5)', fontSize: 18, mr: 1 }} />
                         <InputBase
                             placeholder="Search products..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onKeyDown={handleSearch}
-                            sx={{ fontSize: '14px', width: 180 }}
+                            sx={{
+                                fontSize: '14px', width: 180, color: '#F5F5F5',
+                                '& input::placeholder': { color: 'rgba(255,255,255,0.4)' }
+                            }}
                         />
                     </Box>
 
@@ -116,18 +128,29 @@ export default function Navbar() {
                                 <Button
                                     component={Link}
                                     href="/profile"
-                                    sx={{ color: '#1a1a2e', fontWeight: 600, textTransform: 'none', '&:hover': { bgcolor: 'rgba(0,0,0,0.05)' } }}
+                                    sx={{
+                                        color: '#F5F5F5',
+                                        fontWeight: 600,
+                                        textTransform: 'none',
+                                        '&:hover': { bgcolor: 'rgba(255,255,255,0.08)', color: '#76ABAE' },
+                                    }}
                                 >
-                                    Hi, {username} 👤
+                                    Hi, {username} 
                                 </Button>
 
-                                <IconButton component={Link} href="/favorites" sx={{ color: '#ef4444' }}>
+                                <IconButton component={Link} href="/favorites" sx={{
+                                    color: '#FF5722',
+                                    '&:hover': { bgcolor: 'rgba(255,87,34,0.1)' },
+                                }}>
                                     <Badge badgeContent={favoritesIds.length} color="error">
                                         <FavoriteIcon />
                                     </Badge>
                                 </IconButton>
 
-                                <IconButton component={Link} href="/cart" sx={{ color: '#7c3aed' }}>
+                                <IconButton component={Link} href="/cart" sx={{
+                                    color: '#76ABAE',
+                                    '&:hover': { bgcolor: 'rgba(118,171,174,0.1)' },
+                                }}>
                                     <Badge badgeContent={cartCount} color="error">
                                         <ShoppingCartIcon />
                                     </Badge>
@@ -135,7 +158,10 @@ export default function Navbar() {
 
                                 <IconButton
                                     onClick={handleLogout}
-                                    sx={{ color: '#1a1a2e', '&:hover': { color: '#7c3aed', bgcolor: 'rgba(124,58,237,0.05)' } }}
+                                    sx={{
+                                        color: 'rgba(255,255,255,0.7)',
+                                        '&:hover': { color: '#FF5722', bgcolor: 'rgba(255,87,34,0.1)' },
+                                    }}
                                 >
                                     <LogoutIcon />
                                 </IconButton>
@@ -147,7 +173,12 @@ export default function Navbar() {
                                 <Button
                                     component={Link}
                                     href="/login"
-                                    sx={{ color: '#1a1a2e', fontWeight: 600, textTransform: 'none' }}
+                                    sx={{
+                                        color: '#F5F5F5',
+                                        fontWeight: 600,
+                                        textTransform: 'none',
+                                        '&:hover': { color: '#76ABAE' },
+                                    }}
                                 >
                                     Login
                                 </Button>
@@ -155,7 +186,14 @@ export default function Navbar() {
                                     component={Link}
                                     href="/register"
                                     variant="contained"
-                                    sx={{ bgcolor: '#7c3aed', color: '#fff', fontWeight: 600, textTransform: 'none', borderRadius: 2, '&:hover': { bgcolor: '#6d28d9' } }}
+                                    sx={{
+                                        bgcolor: '#FF5722',
+                                        color: '#fff',
+                                        fontWeight: 600,
+                                        textTransform: 'none',
+                                        borderRadius: 2,
+                                        '&:hover': { bgcolor: '#e64a19' },
+                                    }}
                                 >
                                     Register
                                 </Button>
@@ -165,20 +203,18 @@ export default function Navbar() {
 
                     {/* Mobile - Search + Favorites + Cart + Menu */}
                     <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', gap: 1 }}>
-
-                        {/* Mobile Search Icon */}
-                        <IconButton onClick={() => setSearchOpen(!searchOpen)} sx={{ color: '#1a1a2e' }}>
+                        <IconButton onClick={() => setSearchOpen(!searchOpen)} sx={{ color: '#F5F5F5' }}>
                             <SearchIcon />
                         </IconButton>
 
                         {token && (
                             <>
-                                <IconButton component={Link} href="/favorites" sx={{ color: '#ef4444' }}>
+                                <IconButton component={Link} href="/favorites" sx={{ color: '#FF5722' }}>
                                     <Badge badgeContent={favoritesIds.length} color="error">
                                         <FavoriteIcon />
                                     </Badge>
                                 </IconButton>
-                                <IconButton component={Link} href="/cart" sx={{ color: '#7c3aed' }}>
+                                <IconButton component={Link} href="/cart" sx={{ color: '#76ABAE' }}>
                                     <Badge badgeContent={cartCount} color="error">
                                         <ShoppingCartIcon />
                                     </Badge>
@@ -186,7 +222,7 @@ export default function Navbar() {
                             </>
                         )}
 
-                        <IconButton onClick={() => setDrawerOpen(true)} sx={{ color: '#1a1a2e' }}>
+                        <IconButton onClick={() => setDrawerOpen(true)} sx={{ color: '#F5F5F5' }}>
                             <MenuIcon />
                         </IconButton>
                     </Box>
@@ -198,16 +234,16 @@ export default function Navbar() {
                     <Box sx={{
                         display: { xs: 'flex', md: 'none' },
                         alignItems: 'center',
-                        bgcolor: '#f3f4f6',
+                        bgcolor: 'rgba(255,255,255,0.08)',
                         mx: 2,
                         mb: 1.5,
                         px: 2,
                         py: 0.5,
                         borderRadius: '999px',
-                        border: '1px solid #e5e7eb',
-                        '&:focus-within': { borderColor: '#7c3aed' },
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        '&:focus-within': { borderColor: '#76ABAE' },
                     }}>
-                        <SearchIcon sx={{ color: '#9ca3af', fontSize: 18, mr: 1 }} />
+                        <SearchIcon sx={{ color: 'rgba(255,255,255,0.5)', fontSize: 18, mr: 1 }} />
                         <InputBase
                             autoFocus
                             fullWidth
@@ -215,25 +251,28 @@ export default function Navbar() {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onKeyDown={handleSearch}
-                            sx={{ fontSize: '14px' }}
+                            sx={{
+                                fontSize: '14px',
+                                color: '#F5F5F5',
+                                '& input::placeholder': { color: 'rgba(255,255,255,0.4)' }
+                            }}
                         />
                     </Box>
                 )}
-
             </AppBar>
 
             {/* MOBILE DRAWER */}
             <Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-                <Box sx={{ width: 260, height: '100%', bgcolor: '#EDEDE9', display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ width: 260, height: '100%', bgcolor: '#303841', display: 'flex', flexDirection: 'column' }}>
 
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 2 }}>
                         <Image src="/logo.png" alt="Logo" width={90} height={38} style={{ objectFit: 'contain' }} />
-                        <IconButton onClick={() => setDrawerOpen(false)} sx={{ color: '#1a1a2e' }}>
+                        <IconButton onClick={() => setDrawerOpen(false)} sx={{ color: '#F5F5F5' }}>
                             <CloseIcon />
                         </IconButton>
                     </Box>
 
-                    <Divider sx={{ borderColor: '#d6d5d0' }} />
+                    <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)' }} />
 
                     <List>
                         {navLinks.map((link) => (
@@ -242,11 +281,11 @@ export default function Navbar() {
                                     component={Link}
                                     href={link.href}
                                     onClick={() => setDrawerOpen(false)}
-                                    sx={{ '&:hover': { bgcolor: 'rgba(0,0,0,0.05)' } }}
+                                    sx={{ '&:hover': { bgcolor: 'rgba(255,255,255,0.08)' } }}
                                 >
                                     <ListItemText
                                         primary={link.label}
-                                        slotProps={{ primary: { style: { fontWeight: 600, color: '#1a1a2e' } } }}
+                                        slotProps={{ primary: { style: { fontWeight: 600, color: '#F5F5F5' } } }}
                                     />
                                 </ListItemButton>
                             </ListItem>
@@ -259,11 +298,11 @@ export default function Navbar() {
                                         component={Link}
                                         href="/favorites"
                                         onClick={() => setDrawerOpen(false)}
-                                        sx={{ '&:hover': { bgcolor: 'rgba(0,0,0,0.05)' } }}
+                                        sx={{ '&:hover': { bgcolor: 'rgba(255,255,255,0.08)' } }}
                                     >
                                         <ListItemText
                                             primary={`Favorites (${favoritesIds.length})`}
-                                            slotProps={{ primary: { style: { fontWeight: 600, color: '#ef4444' } } }}
+                                            slotProps={{ primary: { style: { fontWeight: 600, color: '#FF5722' } } }}
                                         />
                                     </ListItemButton>
                                 </ListItem>
@@ -272,11 +311,11 @@ export default function Navbar() {
                                         component={Link}
                                         href="/profile"
                                         onClick={() => setDrawerOpen(false)}
-                                        sx={{ '&:hover': { bgcolor: 'rgba(0,0,0,0.05)' } }}
+                                        sx={{ '&:hover': { bgcolor: 'rgba(255,255,255,0.08)' } }}
                                     >
                                         <ListItemText
                                             primary="Profile"
-                                            slotProps={{ primary: { style: { fontWeight: 600, color: '#7c3aed' } } }}
+                                            slotProps={{ primary: { style: { fontWeight: 600, color: '#76ABAE' } } }}
                                         />
                                     </ListItemButton>
                                 </ListItem>
@@ -284,22 +323,22 @@ export default function Navbar() {
                         )}
                     </List>
 
-                    <Divider sx={{ borderColor: '#d6d5d0' }} />
+                    <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)' }} />
 
                     <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 1.5, mt: 'auto' }}>
                         {token ? (
                             <>
-                                <Typography sx={{ fontSize: '14px', fontWeight: 500, color: '#1a1a2e', textAlign: 'center' }}>
-                                    Hi, {username} 👋
+                                <Typography sx={{ fontSize: '14px', fontWeight: 500, color: '#F5F5F5', textAlign: 'center' }}>
+                                    Hi, {username} 
                                 </Typography>
                                 <Button
                                     fullWidth
                                     onClick={handleLogout}
                                     startIcon={<LogoutIcon />}
                                     sx={{
-                                        color: '#ef4444', fontWeight: 600, textTransform: 'none',
-                                        border: '1px solid #ef4444', borderRadius: 2,
-                                        '&:hover': { bgcolor: 'rgba(239,68,68,0.05)' },
+                                        color: '#FF5722', fontWeight: 600, textTransform: 'none',
+                                        border: '1px solid #FF5722', borderRadius: 2,
+                                        '&:hover': { bgcolor: 'rgba(255,87,34,0.1)' },
                                     }}
                                 >
                                     Logout
@@ -310,7 +349,11 @@ export default function Navbar() {
                                 <Button
                                     fullWidth component={Link} href="/login"
                                     onClick={() => setDrawerOpen(false)}
-                                    sx={{ color: '#1a1a2e', fontWeight: 600, textTransform: 'none', border: '1px solid #d6d5d0', borderRadius: 2, '&:hover': { bgcolor: 'rgba(0,0,0,0.05)' } }}
+                                    sx={{
+                                        color: '#F5F5F5', fontWeight: 600, textTransform: 'none',
+                                        border: '1px solid rgba(255,255,255,0.2)', borderRadius: 2,
+                                        '&:hover': { bgcolor: 'rgba(255,255,255,0.08)' },
+                                    }}
                                 >
                                     Login
                                 </Button>
@@ -318,7 +361,11 @@ export default function Navbar() {
                                     fullWidth component={Link} href="/register"
                                     onClick={() => setDrawerOpen(false)}
                                     variant="contained"
-                                    sx={{ bgcolor: '#7c3aed', color: '#fff', fontWeight: 600, textTransform: 'none', borderRadius: 2, '&:hover': { bgcolor: '#6d28d9' } }}
+                                    sx={{
+                                        bgcolor: '#FF5722', color: '#fff', fontWeight: 600,
+                                        textTransform: 'none', borderRadius: 2,
+                                        '&:hover': { bgcolor: '#e64a19' },
+                                    }}
                                 >
                                     Register
                                 </Button>

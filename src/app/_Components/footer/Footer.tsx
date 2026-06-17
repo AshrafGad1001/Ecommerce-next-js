@@ -13,7 +13,7 @@ export default function Footer() {
     return (
         <Box
             component="footer"
-            sx={{ bgcolor: '#EDEDE9',color: '#1a1a2e', pt: 4, pb: 2 }}
+            sx={{ bgcolor: '#303841', color: '#F5F5F5', pt: 4, pb: 2 }}
         >
             <Box sx={{
                 maxWidth: '1200px',
@@ -29,24 +29,30 @@ export default function Footer() {
 
                 {/* Logo + Description */}
                 <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, justifyContent: { xs: 'center', md: 'flex-start' } }}>
-                        <FontAwesomeIcon icon={faCartShopping} style={{ fontSize: '20px' }} />
-                        <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                            MyApp
+                    <Box sx={{
+                        display: 'flex', alignItems: 'center', gap: 1, mb: 1,
+                        justifyContent: { xs: 'center', md: 'flex-start' }
+                    }}>
+                        <FontAwesomeIcon icon={faCartShopping} style={{ fontSize: '20px', color: '#FF5722' }} />
+                        <Typography variant="h6" sx={{ fontWeight: 800, color: '#F5F5F5' }}>
+                            ClickShop
                         </Typography>
                     </Box>
-                    <Typography variant="body2" sx={{ opacity: 0.7, maxWidth: 220 }}>
+                    <Typography variant="body2" sx={{ opacity: 0.6, maxWidth: 220, color: '#F5F5F5' }}>
                         Your one-stop shop for the best products at the best prices.
                     </Typography>
                 </Box>
 
                 {/* Nav Links */}
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, alignItems: { xs: 'center', md: 'flex-start' } }}>
-                    <Typography variant="body2" sx={{ fontWeight: 700, mb: 0.5, opacity: 0.9 }}>
+                    <Typography variant="body2" sx={{ fontWeight: 700, mb: 0.5, color: '#76ABAE' }}>
                         Quick Links
                     </Typography>
                     {[
+                        { label: 'Home', href: '/' },
                         { label: 'Products', href: '/products' },
+                        { label: 'Categories', href: '/categories' },
+                        { label: 'Brands', href: '/brands' },
                     ].map((link) => (
                         <Typography
                             key={link.href}
@@ -54,11 +60,10 @@ export default function Footer() {
                             href={link.href}
                             variant="body2"
                             sx={{
-                                color: 'white',
-                                opacity: 0.7,
+                                color: 'rgba(245,245,245,0.6)',
                                 textDecoration: 'none',
-                                '&:hover': { opacity: 1 },
-                                transition: 'opacity 0.2s',
+                                '&:hover': { color: '#FF5722' },
+                                transition: 'color 0.2s ease',
                             }}
                         >
                             {link.label}
@@ -68,7 +73,7 @@ export default function Footer() {
 
                 {/* Social */}
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: { xs: 'center', md: 'flex-start' }, gap: 1 }}>
-                    <Typography variant="body2" sx={{ fontWeight: 700, mb: 0.5, opacity: 0.9 }}>
+                    <Typography variant="body2" sx={{ fontWeight: 700, mb: 0.5, color: '#76ABAE' }}>
                         Follow Us
                     </Typography>
                     <Box sx={{ display: 'flex', gap: 1 }}>
@@ -81,11 +86,14 @@ export default function Footer() {
                                 key={i}
                                 component={Link}
                                 href={social.href}
-                             sx={{
-    color: '#1a1a2e',
-    bgcolor: 'rgba(0,0,0,0.06)',
-    '&:hover': { bgcolor: 'rgba(0,0,0,0.12)' },
-}}
+                                sx={{
+                                    color: '#F5F5F5',
+                                    bgcolor: 'rgba(255,255,255,0.08)',
+                                    width: 36,
+                                    height: 36,
+                                    '&:hover': { bgcolor: '#FF5722', color: '#fff' },
+                                    transition: 'all 0.2s ease',
+                                }}
                             >
                                 <FontAwesomeIcon icon={social.icon} style={{ fontSize: '14px' }} />
                             </IconButton>
@@ -95,14 +103,14 @@ export default function Footer() {
 
             </Box>
 
-            <Divider sx={{ borderColor: 'rgba(0,0,0,0.1)', mx: 3 }} />
+            <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)', mx: 3 }} />
 
             <Typography
                 variant="body2"
                 suppressHydrationWarning
-                sx={{ textAlign: 'center', py: 2, opacity: 0.6 }}
+                sx={{ textAlign: 'center', py: 2, color: 'rgba(245,245,245,0.4)' }}
             >
-                © {new Date().getFullYear()} MyApp. All rights reserved.
+                © {new Date().getFullYear()} ClickShop. All rights reserved.
             </Typography>
 
         </Box>
